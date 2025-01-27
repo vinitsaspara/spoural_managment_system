@@ -1,0 +1,14 @@
+Student -- 
+		home, games, browse
+
+StudentCordinator --
+		games->players->status
+
+FacultyCordinator --
+		selected students(exel sheet) of faculty department --> if it is faculty coordinator otherwise give all student list which is selected.
+
+Admin -- 
+		list of the game which is created.
+		Authorisation of adding facultyCordinator and studentCordinator and also see the list.
+
+ 
