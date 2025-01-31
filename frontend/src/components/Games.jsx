@@ -2,10 +2,14 @@ import React from "react";
 import Navbar from "./shared/Navbar";
 import FilterGameCard from "./FilterGameCard";
 import GameCards from "./GameCards";
+import { useSelector } from "react-redux";
 
-const GamesArray = [1, 2, 3, 4, 5, 6, 7, 8];
+// const GamesArray = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function Games() {
+
+  const {allGames} = useSelector(store=>store.game);
+
   return (
     <div>
       <Navbar />
@@ -14,13 +18,13 @@ function Games() {
           <div className="w-[20%]">
             <FilterGameCard />
           </div>
-          {GamesArray.length <= 0 ? (
+          {allGames.length <= 0 ? (
             <span>Job not found</span>
           ) : (
             <div className="flex-1 h-[88vh] ">
               <div className="grid grid-cols-3 gap-4 ">
-                {GamesArray.map((job) => (
-                  <GameCards />
+                {allGames.map((game) => (
+                  <GameCards key={game?._id} game={game} />
                 ))}
               </div>
             </div>

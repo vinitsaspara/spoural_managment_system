@@ -44,30 +44,30 @@ export const createGame = async (req, res) => {
 
 export const getGame = async (req, res) => {
     try {
+        // Fetch all games and populate user details
+        const games = await Game.find().populate("userId", "fullname email");
 
-        const userId = req.id;
-
-        //    console.log(userId);
-
-
-        const games = await Game.find({ userId });
-
-        if (!games) {
+        if (games.length === 0) {
             return res.status(404).json({
-                message: "No any game created",
+                message: "No games found.",
                 success: false
-            })
+            });
         }
 
         return res.status(200).json({
             games,
             success: true
-        })
+        });
 
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false
+        });
     }
-}
+};
+
 
 //  get game by id
 
@@ -75,7 +75,9 @@ export const getGameById = async (req, res) => {
     try {
 
         const gameId = req.params.id;
-        const game = await Game.findById(gameId);
+        const game = await Game.findById(gameId).populate({
+            path: "players",
+        });
 
         if (!game) {
             return res.status(404).json({

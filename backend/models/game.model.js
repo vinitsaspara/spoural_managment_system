@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 
 const GameSchema = new mongoose.Schema({
+
+  // game location is not here it will soon later.
+
   gameCatagory: {
     type: String,
     required: true,
