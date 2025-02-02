@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 const GameSchema = new mongoose.Schema({
-
-  // game location is not here it will soon later.
-
+  logo: {
+    type: String,
+    required: true
+  },
   gameCatagory: {
     type: String,
     required: true,
@@ -14,6 +15,11 @@ const GameSchema = new mongoose.Schema({
   skills: {
     type: [String],
     required: true,
+  },
+  location: {
+    type: String,
+    required: true,
+    enum: ['Charusat Main Ground', 'ARIP Ground', 'Sport Complex', 'Central Loan']
   },
   createdAt: { type: Date, default: Date.now },
   userId: {

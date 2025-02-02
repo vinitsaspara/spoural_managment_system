@@ -1,14 +1,16 @@
-Student -- 
-		home, games, browse
 
-StudentCordinator --
-		games->players->status
+Missing fetures
 
-FacultyCordinator --
-		selected students(exel sheet) of faculty department --> if it is faculty coordinator otherwise give all student list which is selected.
+-✅ In the game model logo is added but in the postman we can not send file therefore createGame function is not working in the game.controller.js that means working but in the postman it is not woking.
 
-Admin -- 
-		list of the game which is created.
-		Authorisation of adding facultyCordinator and studentCordinator and also see the list.
+- applyGameHandler in this function we only write axios not werite ant type (GameDetails).
 
- 
+- AdminUpdateGame.jsx is not implemented this file is used when admin want to update the game details.
+
+
+Extra fetures
+- We can add the home page in the all the role.
+- We can add the overAll result of the spoural for all the role.
+- We can add the live youtube link.
+
+

@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import authSlice from "./authSlice";
 import gameSlice from "./gameSlice";
+import adminSlice from "./adminSlice"
 
 import {
   persistReducer,
@@ -17,6 +18,7 @@ import storage from "redux-persist/lib/storage";
 const rootReducer = combineReducers({
   auth: authSlice,
   game: gameSlice,
+  admin:adminSlice
 });
 
 // ✅ Step 2: Persist only the reducer

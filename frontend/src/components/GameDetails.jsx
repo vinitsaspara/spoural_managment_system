@@ -110,7 +110,7 @@ function GameDetails() {
           <h1 className="font-bold my-1">
             Location:
             <span className="p-4 font-normal text-gray-800">
-              Charusat Main Ground
+              {singleGame?.location}
             </span>
           </h1>
           <h1 className="font-bold my-1">

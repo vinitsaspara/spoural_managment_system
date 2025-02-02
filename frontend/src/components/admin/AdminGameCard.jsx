@@ -1,36 +1,36 @@
-import React from 'react'
-import { Button } from './ui/button'
-import { Avatar, AvatarImage } from './ui/avatar'
-import { Badge } from './ui/badge'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Button } from '../ui/button';
+import { Avatar, AvatarImage } from '../ui/avatar';
+import { Badge } from '../ui/badge';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setSingleGame } from '@/redux/gameSlice';
 
-// const skills = [
-//     "Speed",
-//     "Strength",
-//     "Flexibility"
-//   ]
+function AdminGameCard({game}) {
 
-// const gameId = "nkdlsflisdjfiosadjf";
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-function GameCards({game}) {
-  
+    const daysAgoFunction = (mongodbTime)=>{
+        const createdAt = new Date(mongodbTime);
+        const currentTime = new Date();
+        const timeDiff = currentTime - createdAt;
+    
+        return Math.floor(timeDiff/(1000*24*60*60));
+    }
+    
+    const getShortDescription = (desc) => {
+      const words = desc.split(' ');  // Split the string into words
+      if (words.length > 10) {
+        return words.slice(0, 10).join(' ') + '...'; // Take first 4 words and add "..."
+      }
+      return desc;  // Return the description as is if it's 4 words or less
+    };
 
-  const navigate = useNavigate();
-  const daysAgoFunction = (mongodbTime)=>{
-    const createdAt = new Date(mongodbTime);
-    const currentTime = new Date();
-    const timeDiff = currentTime - createdAt;
-
-    return Math.floor(timeDiff/(1000*24*60*60));
-}
-
-const getShortDescription = (desc) => {
-  const words = desc.split(' ');  // Split the string into words
-  if (words.length > 10) {
-    return words.slice(0, 10).join(' ') + '...'; // Take first 4 words and add "..."
-  }
-  return desc;  // Return the description as is if it's 4 words or less
-};
+    const detailsHandler = () =>{
+      dispatch(setSingleGame(game));
+      navigate(`/admin/game/details/${game?._id}`)
+    }
 
   return (
     <div className="p-5 rounded-md shadow-lg bg-[#003366] text-white border border-gray-100">
@@ -67,11 +67,12 @@ const getShortDescription = (desc) => {
         </Badge>
       </div>
       <div className="flex items-center gap-4 mt-4 ">
-        <Button className="w-full bg-white text-black  hover:bg-[#04A1DB]" onClick={()=>navigate(`/details/${game?._id}`)}>Details & Register</Button>
+        <Button className="w-full bg-white text-black  hover:bg-[#04A1DB]" onClick={
+          detailsHandler}>Details</Button>
 
       </div>
     </div>
   )
 }
 
-export default GameCards
+export default AdminGameCard

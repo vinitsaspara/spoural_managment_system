@@ -9,10 +9,36 @@ import { USER_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "@/redux/authSlice";
-import { Loader2 } from "lucide-react";
+import { ChevronDown, Loader2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+
+const allDepartments = ["DCS", "DCE", "DIT"];
+
+const allIdNumber = [];
+
+// First, add DCS IDs (23DCS001 to 23DCS150)
+for (let i = 1; i <= 150; i++) {
+  allIdNumber.push(`23DCS${i.toString().padStart(3, "0")}`);
+}
+
+// Next, add DCE IDs (23DCE001 to 23DCE150)
+for (let i = 1; i <= 150; i++) {
+  allIdNumber.push(`23DCE${i.toString().padStart(3, "0")}`);
+}
+
+// Finally, add DIT IDs (23DIT001 to 23DIT096)
+for (let i = 1; i <= 96; i++) {
+  allIdNumber.push(`23DIT${i.toString().padStart(3, "0")}`);
+}
 
 function Signup() {
   const [input, setInput] = useState({
+    userId: "",
     fullname: "",
     email: "",
     phoneNumber: "",
@@ -22,7 +48,7 @@ function Signup() {
   });
 
   const navigate = useNavigate();
-  const {loading} = useSelector(store=>store.auth);
+  const { loading } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
 
   const changeEventHandler = (e) => {
@@ -33,20 +59,29 @@ function Signup() {
     setInput({ ...input, file: e.target.files?.[0] });
   };
 
+  const selectDepartment = (department) => {
+    setInput({ ...input, department });
+  };
+
+  const selectId = (id) => {
+    setInput({ ...input, userId: id });
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
+    formData.append("userId", input.userId);
     formData.append("fullname", input.fullname);
     formData.append("email", input.email);
     formData.append("phoneNumber", input.phoneNumber);
     formData.append("password", input.password);
     formData.append("department", input.department);
-  
+
     if (input.file) formData.append("file", input.file);
-  
+
     try {
-        dispatch(setLoading(true));
+      dispatch(setLoading(true));
       const res = await axios.post(
         "http://localhost:8000/api/v2/user/register",
         formData,
@@ -57,7 +92,7 @@ function Signup() {
           withCredentials: true,
         }
       );
-  
+
       if (res.data.success) {
         navigate("/login");
         toast.success(res.data.message);
@@ -65,96 +100,148 @@ function Signup() {
     } catch (error) {
       console.error("Error:", error.response?.data || error.message);
       toast.error(error.response?.data?.message || "Something went wrong!");
-    }finally{
+    } finally {
       dispatch(setLoading(false));
     }
   };
-  
 
   return (
     <div>
-      <Navbar></Navbar>
-      <div className="flex items-center justify-center max-w-7xl mx-auto ">
+      <Navbar />
+      <div className="flex items-center justify-center max-w-7xl mx-auto">
         <form
           onSubmit={submitHandler}
-          className="w-1/2 border-gray-200 rounded-md p-4 my-4 shadow-lg"
+          className="w-[500px] border border-gray-300 rounded-md p-6 my-8 shadow-lg space-y-4"
         >
-          <h1 className="font-bold text-xl mb-5">Sign Up</h1>
-          <div className="my-2">
-            <Label>Full Name</Label>
+          <h1 className="font-bold text-xl text-center mb-4">Sign Up</h1>
+
+          {/* ID No. Row */}
+          <div className="flex items-center gap-4">
+            <Label className="w-1/3 text-right">ID No.</Label>
+            <div className="w-2/3">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="border p-2 flex gap-1 items-center rounded cursor-pointer">
+                  <span>{input.userId || "Select Your ID No."}</span>
+                  <ChevronDown className="ml-auto" size={16} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="max-h-60 overflow-auto">
+                  {allIdNumber.map((item, index) => (
+                    <DropdownMenuItem key={index} onClick={() => selectId(item)}>
+                      {item}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+
+          {/* Department Row */}
+          <div className="flex items-center gap-4">
+            <Label className="w-1/3 text-right">Department</Label>
+            <div className="w-2/3">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="border p-2 flex gap-1 items-center rounded cursor-pointer">
+                  <span>{input.department || "Select Department"}</span>
+                  <ChevronDown className="ml-auto" size={16} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  {allDepartments.map((item, index) => (
+                    <DropdownMenuItem key={index} onClick={() => selectDepartment(item)}>
+                      {item}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+
+          {/* Full Name Row */}
+          <div className="flex items-center gap-4">
+            <Label className="w-1/3 text-right">Full Name</Label>
             <Input
               type="text"
               value={input.fullname}
               name="fullname"
               onChange={changeEventHandler}
               placeholder="Thomas Shelby"
-            ></Input>
+              className="w-2/3"
+            />
           </div>
-          <div className="my-2">
-            <Label>Email</Label>
+
+          {/* Email Row */}
+          <div className="flex items-center gap-4">
+            <Label className="w-1/3 text-right">Email</Label>
             <Input
               type="email"
               value={input.email}
               name="email"
               onChange={changeEventHandler}
               placeholder="thomas@gmail.com"
-            ></Input>
+              className="w-2/3"
+            />
           </div>
-          <div className="my-2">
-            <Label>PhoneNumber</Label>
+
+          {/* Phone Number Row */}
+          <div className="flex items-center gap-4">
+            <Label className="w-1/3 text-right">Phone Number</Label>
             <Input
               type="text"
               value={input.phoneNumber}
               name="phoneNumber"
               onChange={changeEventHandler}
               placeholder="123456789"
-            ></Input>
+              className="w-2/3"
+            />
           </div>
-          <div className="my-2">
-            <Label>Password</Label>
+
+          {/* Password Row */}
+          <div className="flex items-center gap-4">
+            <Label className="w-1/3 text-right">Password</Label>
             <Input
               type="password"
               value={input.password}
               name="password"
               onChange={changeEventHandler}
               placeholder="Enter password"
-            ></Input>
+              className="w-2/3"
+            />
           </div>
-          <div>
-          <Label>Department</Label>
-            <Input
-              type="text"
-              value={input.department}
-              name="department"
-              onChange={changeEventHandler}
-              placeholder="Enter department"
-            ></Input>
+
+          {/* Profile Picture Row */}
+          <div className="flex items-center gap-4">
+            <Label className="w-1/3 text-right">Profile Picture</Label>
+            <div className="w-2/3">
+              <Input
+                accept="image/*"
+                type="file"
+                className="cursor-pointer"
+                onChange={changeFileHandler}
+              />
+            </div>
           </div>
-          <div className="mt-2">
-            <Label>Profile Picture</Label>
-            <Input
-              accept="image/*"
-              type="file"
-              className="cursor-pointer"
-              onChange={changeFileHandler}
-            ></Input>
+
+          {/* Submit Button */}
+          <div className="flex justify-end mt-6">
+            {loading ? (
+              <Button className="w-full flex items-center justify-center">
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              <Button type="submit" className="w-full">
+                Signup
+              </Button>
+            )}
           </div>
-          {loading ? (
-            <Button className="w-full my-4">
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              please wait
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full my-4">
-              Signup
-            </Button>
-          )}
-          <span className="text-sm text-gray-500">
-            Alredy have an account?{" "}
-            <Link to="/login" className="text-blue-600">
-              Login
-            </Link>
-          </span>
+
+          <div className="text-center mt-4">
+            <span className="text-sm text-gray-500">
+              Already have an account?{" "}
+              <Link to="/login" className="text-blue-600">
+                Login
+              </Link>
+            </span>
+          </div>
         </form>
       </div>
     </div>

@@ -10,11 +10,13 @@ import { USER_API_END_POINT } from "@/utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { Loader2 } from "lucide-react";
 import { setLoading, setUser } from "@/redux/authSlice";
+import { RadioGroup } from "../ui/radio-group";
 
 function Login() {
   const [input, setInput] = useState({
     email: "",
     password: "",
+    role:""
   });
 
   const { loading } = useSelector((store) => store.auth);
@@ -80,6 +82,47 @@ function Login() {
               placeholder="Enter password"
             ></Input>
           </div>
+
+          <div className="flex items-center gap-3">
+            <Label>Role</Label>
+            <RadioGroup className="flex items-center gap-4 my-5">
+              <div className="flex items-center space-x-2">
+                <Input
+                  type="radio"
+                  name="role"
+                  value="Student"
+                  checked={input.role === "Student"}
+                  onChange={changeEventHandler}
+                  className="cursor-pointer"
+                />
+                <Label htmlFor="r1">Student</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Input
+                  type="radio"
+                  name="role"
+                  value="StudentCoordinator"
+                  checked={input.role === "StudentCoordinator"}
+                  onChange={changeEventHandler}
+                  className="cursor-pointer"
+                />
+                <Label htmlFor="r2">StudentCoordinator</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Input
+                  type="radio"
+                  name="role"
+                  value="Faculty"
+                  checked={input.role === "Faculty"}
+                  onChange={changeEventHandler}
+                  className="cursor-pointer"
+                />
+                <Label htmlFor="r3">Faculty</Label>
+              </div>
+            </RadioGroup>
+            
+          </div>
+
           {loading ? (
             <Button className="w-full my-4">
               {" "}
