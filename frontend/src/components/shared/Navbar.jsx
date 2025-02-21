@@ -50,6 +50,9 @@ function Navbar() {
         <li>
           <Link to="/faculty">Faculty</Link>
         </li>
+        <li>
+          <Link to="/faculty/allplayer"> All Selected Player</Link>
+        </li>
       </>
     );
   } else if (user && user.role === "StudentCoordinator") {
@@ -58,6 +61,7 @@ function Navbar() {
         <li>
           <Link to="/studentCoordinator">Games</Link>
         </li>
+      
       </>
     );
   } else {

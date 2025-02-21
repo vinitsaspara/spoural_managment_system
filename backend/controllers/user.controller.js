@@ -116,6 +116,7 @@ export const login = async (req, res) => {
         }
 
         if (!role) {
+           
             if (user.role === "Admin") {
 
                 const isPasswordValid = await bcrypt.compare(password, user.password);

@@ -17,6 +17,8 @@ import AdminCreateGame from './components/admin/AdminCreateGame'
 import Faculty from './faculty/Faculty'
 import StudentCoordinator from './studentCoordinator/StudentCoordinator'
 import ViweAppliedStudent from './studentCoordinator/ViweAppliedStudent'
+import ViweSelectedStudent from './faculty/ViweSelectedStudent'
+import AllSelectedStudent from './faculty/AllSelectedStudent'
 
 const appRouter = createBrowserRouter([
   {
@@ -82,6 +84,14 @@ const appRouter = createBrowserRouter([
   {
     path : '/faculty',
     element : <Faculty/>
+  },
+  {
+    path : '/faculty/viewselectedStudent/:id',
+    element : <ViweSelectedStudent/>
+  },
+  {
+    path : '/faculty/allplayer',
+    element : <AllSelectedStudent/>
   },
 
 
