@@ -4,8 +4,12 @@ import {User} from '../models/user.model.js'; // Adjust the path to your user mo
 const isStudentCordinator = async (req, res, next) => {
     try {
         // Extract the token from cookies
+<<<<<<< HEAD
+        const token = req.cookies.token;
+=======
         const token = req?.cookies?.token;
         console.log(token);
+>>>>>>> a94580c22e96800c9d3b732256aa318dd9608c4f
         
 
         if (!token) {
