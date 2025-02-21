@@ -28,7 +28,7 @@ function MemberDetails() {
     <div className="max-w-5xl mx-auto my-10 shadow-lg p-5 rounded-md">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-bold text-lg">Akaksh Patel</h1>
+          <h1 className="font-bold text-lg">{singleMembre?.fullname}</h1>
         </div>
 
         <Button onClick = {removeHandler} className="bg-red-600 hover:bg-red-500">
