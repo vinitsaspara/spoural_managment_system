@@ -13,7 +13,7 @@ export const registorGame = async (req, res) => {
         }
 
         // check if the user has alredy register for the game
-
+// harsh
         const existingRegistration = await Registration.findOne({ student: userId, game: gameId });
 
         if (existingRegistration) {
