@@ -5,9 +5,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 
-function SCGameCards({game}) {
+function FGameCards({game}) {
   
-
   const navigate = useNavigate();
   const daysAgoFunction = (mongodbTime)=>{
     const createdAt = new Date(mongodbTime);
@@ -61,11 +60,12 @@ const getShortDescription = (desc) => {
       </div>
       <div className="flex items-center gap-4 mt-4 ">
         <Button className="w-full bg-white text-black  hover:bg-[#04A1DB]" 
-        onClick={()=>navigate(`/viweAppliedStudent/${game?._id}`)}
-        >Viwe Applied Student</Button>
+        onClick={()=>navigate(`viewselectedStudent/${game?._id}`)}
+        >Viwe Selected Student</Button>
       </div>
     </div>
   )
 }
 
-export default SCGameCards 
+
+export default FGameCards 

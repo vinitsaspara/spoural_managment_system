@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import SCGameCards from "./SCGameCards";
 import Navbar from "@/components/shared/Navbar";
 
-// const GamesArray = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function StudentCoordinator() {
 
@@ -16,7 +15,7 @@ function StudentCoordinator() {
         <div className="flex gap-5">
           
           {allGames.length <= 0 ? (
-            <span>Job not found</span>
+            <span>Game not found</span>
           ) : (
             <div className="flex-1 h-[88vh] ">
               <div className="grid grid-cols-3 gap-4 ">

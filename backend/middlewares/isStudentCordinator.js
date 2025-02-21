@@ -4,7 +4,9 @@ import {User} from '../models/user.model.js'; // Adjust the path to your user mo
 const isStudentCordinator = async (req, res, next) => {
     try {
         // Extract the token from cookies
-        const token = req.cookies.token;
+        const token = req?.cookies?.token;
+        console.log(token);
+        
 
         if (!token) {
             return res.status(401).json({ message: "Unauthorized: No token provided" });
