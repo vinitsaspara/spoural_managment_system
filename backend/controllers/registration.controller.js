@@ -12,8 +12,7 @@ export const registorGame = async (req, res) => {
             return res.status(400).json({ message: "Game id is required", success: false });
         }
 
-        // check if the user has alredy register for the game
-// harsh
+   
         const existingRegistration = await Registration.findOne({ student: userId, game: gameId });
 
         if (existingRegistration) {
