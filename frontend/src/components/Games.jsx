@@ -3,10 +3,13 @@ import Navbar from "./shared/Navbar";
 import FilterGameCard from "./FilterGameCard";
 import GameCards from "./GameCards";
 import { useSelector } from "react-redux";
+import useGetAllGame from "@/hooks/useGetAllGame";
 
 // const GamesArray = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function Games() {
+
+  useGetAllGame();
 
   const {allGames} = useSelector(store=>store.game);
 

@@ -26,9 +26,13 @@ function ViewAppliedStudent() {
   useEffect(() => {
     const fetchPlayers = async () => {
       dispatch(setLoading(true));
+      // console.log("hello");
+      
       try {
         const response = await axios.get(`http://localhost:8000/api/v2/registration/${gameId}/getplayers`, { withCredentials: true });
-        // console.log(response?.data?.game?.players[0]?.student?.department);
+        
+        // console.log(response.data)
+
         if (response.data.success) {
           setPlayers(response?.data?.game?.players);
           setGameDetails({

@@ -8,7 +8,7 @@ export const createGame = async (req, res) => {
       // Destructure required fields from req.body
       const { gameName, description, location, gameCatagory, skills } = req.body;
       // Get the logo file from the request
-      // console.log(gameName, description, location, gameCatagory, skills);
+      console.log(gameName, description, location, gameCatagory, skills);
       
       const file = req.file;
   

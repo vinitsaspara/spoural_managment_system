@@ -1,6 +1,7 @@
 import { Registration } from "../models/registration.model.js";
 import { Game } from "../models/game.model.js"
 import { User } from "../models/user.model.js";
+import { populate } from "dotenv";
 
 export const registorGame = async (req, res) => {
     try {
@@ -13,7 +14,7 @@ export const registorGame = async (req, res) => {
         }
 
         // check if the user has alredy register for the game
-// harsh
+        // harsh
         const existingRegistration = await Registration.findOne({ student: userId, game: gameId });
 
         if (existingRegistration) {
@@ -95,7 +96,6 @@ export const getPlayers = async (req, res) => {
             return res.status(404).json({ message: "User not found", success: false });
         }
 
-        // Corrected query using _id
         const game = await Game.findById(gameId).populate({
             path: 'players',
             options: { sort: { createdAt: -1 } },
@@ -109,8 +109,13 @@ export const getPlayers = async (req, res) => {
             return res.status(404).json({ message: "Game not found", success: false });
         }
 
+        if (game.players.length === 0) {
+            return res.status(404).json({ message: "No players found", success: false });
+        }
+
+        // ✅ Added null check before accessing `.department`
         const filteredPlayers = game.players.filter(player =>
-            player.student.department === user.department
+            player.student && player.student.department === user.department
         );
 
         if (filteredPlayers.length === 0) {
@@ -126,10 +131,11 @@ export const getPlayers = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error);
+        console.error("Error in getPlayers:", error);
         return res.status(500).json({ message: "Internal Server Error", success: false });
     }
 };
+
 
 
 //  update the status
@@ -175,38 +181,49 @@ export const updateStatus = async (req, res) => {
     }
 }
 
-
 export const getselectedPlayers = async (req, res) => {
     try {
         const gameId = req.params.id;
         const userId = req.id;
+
+        // console.log("Game ID:", gameId);
+        // console.log("User ID:", userId);
 
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User not found", success: false });
         }
 
-        const game = await Game.findById(gameId).populate({
-            path: 'players',
-            options: { sort: { createdAt: -1 } },
-            populate: {
-                path: 'student',
-                options: { sort: { createdAt: -1 } }
-            }
-        });
+        // console.log("User Department:", user.department);
+
+        const game = await Game.findById(gameId)
+            .populate({
+                path: 'players', // Populate the `players` array (which refers to Registration)
+                populate: {
+                    path: 'student', // Inside `Registration`, populate `student` (which refers to User)
+                    model: 'User',  // Ensure it populates from the `User` collection
+                    select: 'fullname department email phoneNumber userId' // Select only required fields
+                }
+            })
+            .exec();
 
         if (!game) {
             return res.status(404).json({ message: "Game not found", success: false });
         }
 
+
+        // Fix: Ensure `student` exists before accessing `department`
         const filteredPlayers = game.players.filter(player =>
-            player.student.department === user.department && player.status === 'selected'
+            player.student?.department === user.department && player.status === 'selected'
         );
 
+        // console.log("Filtered Players Count:", filteredPlayers.length);
+
         if (filteredPlayers.length === 0) {
-            return res.status(403).json({
-                message: "No players from the same department as the user",
-                success: false
+            return res.status(200).json({
+                message: "No selected players from the same department",
+                success: false,
+                players: filteredPlayers
             });
         }
 
@@ -216,14 +233,19 @@ export const getselectedPlayers = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error);
+        console.error("Error in getselectedPlayers:", error);
+        return res.status(500).json({ message: "Internal server error", success: false });
     }
-}
+};
+
 
 export const getAllPlayers = async (req, res) => {
     try {
         const userId = req.id;
         const user = await User.findById(userId);
+
+        // console.log(userId,user);
+
 
         if (!user) {
             return res.status(404).json({ message: "User not found", success: false });

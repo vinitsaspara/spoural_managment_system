@@ -3,8 +3,12 @@ import { useSelector } from "react-redux";
 import Navbar from "@/components/shared/Navbar";
 
 import FGameCard from './FGameCard'
+import useGetAllGame from "@/hooks/useGetAllGame";
 
 function StudentCoordinator() {
+
+  useGetAllGame()
+
 
   const {allGames} = useSelector(store=>store.game);
 

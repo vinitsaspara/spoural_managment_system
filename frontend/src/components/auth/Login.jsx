@@ -1,27 +1,24 @@
 import React, { useState } from "react";
-import Navbar from "../shared/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
-import { USER_API_END_POINT } from "@/utils/constant";
 import { useDispatch, useSelector } from "react-redux";
-import { Loader2 } from "lucide-react";
+import { Loader2, User, Lock } from "lucide-react";
 import { setLoading, setUser } from "@/redux/authSlice";
-import { RadioGroup } from "../ui/radio-group";
+import charusatLogo from "/public/charusat.jpg"; // Ensure this path is correct
+import Navbar from "../shared/Navbar";
 
 function Login() {
-  const [input, setInput] = useState({
-    email: "",
-    password: "",
-    role:""
-  });
-
+  const [input, setInput] = useState({ userId: "", password: "" });
   const { loading } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // console.log(loading);
+  
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
@@ -29,16 +26,12 @@ function Login() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     try {
       dispatch(setLoading(true));
-      const res = await axios.post(`${USER_API_END_POINT}/login`, input, {
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const res = await axios.post("http://localhost:8000/api/v2/user/login", input, {
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-
       if (res.data.success) {
         dispatch(setUser(res.data.user));
         navigate("/");
@@ -53,95 +46,68 @@ function Login() {
   };
 
   return (
-    <div>
-      <Navbar></Navbar>
-      <div className="flex items-center justify-center max-w-7xl mx-auto ">
-        <form
-          onSubmit={submitHandler}
-          className="w-1/3 border-gray-200 rounded-md p-4 my-4 shadow-lg"
-        >
-          <h1 className="font-bold text-xl mb-5">Login</h1>
-          <div className="my-2">
-            <Label>Email</Label>
-            <Input
-              type="email"
-              value={input.email}
-              name="email"
-              onChange={changeEventHandler}
-              placeholder="thomas@gmail.com"
-            ></Input>
-          </div>
-
-          <div className="my-2">
-            <Label>Password</Label>
-            <Input
-              type="password"
-              value={input.password}
-              name="password"
-              onChange={changeEventHandler}
-              placeholder="Enter password"
-            ></Input>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Label>Role</Label>
-            <RadioGroup className="flex items-center gap-4 my-5">
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="radio"
-                  name="role"
-                  value="Student"
-                  checked={input.role === "Student"}
-                  onChange={changeEventHandler}
-                  className="cursor-pointer"
-                />
-                <Label htmlFor="r1">Student</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="radio"
-                  name="role"
-                  value="StudentCoordinator"
-                  checked={input.role === "StudentCoordinator"}
-                  onChange={changeEventHandler}
-                  className="cursor-pointer"
-                />
-                <Label htmlFor="r2">StudentCoordinator</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Input
-                  type="radio"
-                  name="role"
-                  value="Faculty"
-                  checked={input.role === "Faculty"}
-                  onChange={changeEventHandler}
-                  className="cursor-pointer"
-                />
-                <Label htmlFor="r3">Faculty</Label>
-              </div>
-            </RadioGroup>
-            
-          </div>
-
-          {loading ? (
-            <Button className="w-full my-4">
-              {" "}
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              please wait
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full my-4 bg-[#003366] hover:bg-[#007BFF]">
+    <div className="min-h-screen bg-gray-100 flex flex-col">
+      <Navbar />
+      <div className="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-md">
+          <div>
+            <img src={charusatLogo} alt="CHARUSAT Logo" className="mx-auto h-18 w-auto" />
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-700 ">
               Login
-            </Button>
-          )}
+            </h2>
+          </div>
+          <form className="mt-8 space-y-6" onSubmit={submitHandler}>
+            <div className="rounded-md shadow-sm -space-y-px">
+              <div>
+                <Label htmlFor="userId" className="sr-only">User ID</Label>
+                <Input
+                  id="userId"
+                  name="userId"
+                  type="text"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="User ID"
+                  value={input.userId}
+                  onChange={changeEventHandler}
+                />
+              </div>
+              <div>
+                <Label htmlFor="password" className="sr-only">Password</Label>
+                <Input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Password"
+                  value={input.password}
+                  onChange={changeEventHandler}
+                />
+              </div>
+            </div>
 
-          <span className="text-sm text-gray-500">
-            Don't have an account?{" "}
-            <Link to="/signup" className="text-blue-600">
-              Sing Up
+            <div>
+              <Button
+                type="submit"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                disabled={loading}
+              >
+                {loading ? (
+                  <Loader2 className="animate-spin h-5 w-5 mr-3" />
+                ) : (
+                  <Lock className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400 mr-2" />
+                )}
+                {loading ? 'Signing in...' : 'Sign in'}
+              </Button>
+            </div>
+          </form>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Don't have an account?{' '}
+            <Link to="/signup" className="font-medium text-indigo-600 hover:text-indigo-500">
+              Sign up now
             </Link>
-          </span>
-        </form>
+          </p>
+        </div>
       </div>
     </div>
   );

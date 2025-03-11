@@ -89,121 +89,52 @@ export const register = async (req, res) => {
 // Login Function
 export const login = async (req, res) => {
     try {
-        const { email, password, role } = req.body;
+        const { userId, password } = req.body;
 
-        // console.log(email, password, role);
-
-
-        if (!email || !password) {
+        if (!userId || !password) {
             return res.status(400).json({
                 message: "Please fill in all fields",
                 success: false
             });
         }
 
-
-        // Find the user by email
-        const user = await User.findOne({ email });
-
-        // console.log(user);
-
+        // Convert userId to lowercase for case-insensitive matching
+        const user = await User.findOne({ userId: { $regex: new RegExp(`^${userId}$`, "i") } });
+        
 
         if (!user) {
             return res.status(400).json({
-                message: "Invalid email or password",
+                message: "Invalid user ID or password",
                 success: false
             });
         }
 
-        if (!role) {
-           
-            if (user.role === "Admin") {
+        // Password validation
+        let isPasswordValid = false;
 
-                const isPasswordValid = await bcrypt.compare(password, user.password);
-                if (!isPasswordValid) {
-                    return res.status(400).json({
-                        message: "Invalid email or password",
-                        success: false
-                    });
-                }
-
-                // Generate a JWT token
-                const token = jwt.sign(
-                    {
-                        userId: user._id,
-                    },
-                    process.env.SECRET_KEY, // Store your secret key in environment variables
-                    { expiresIn: '1d' }
-                );
-
-                // Create a new user object without modifying the original `user`
-                const userData = {
-                    _id: user._id,
-                    userId: user.userId,
-                    fullname: user.fullname,
-                    email: user.email,
-                    role: user.role,
-                    phoneNumber: user.phoneNumber,
-                    department: user.department,
-                    profile: user.profile
-                };
-
-                return res.status(200).cookie("token", token,
-                    { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' })
-                    .json({
-                        message: `Welcome back ${userData.fullname}`,
-                        user: userData,
-                        success: true
-                    });
-
-            } else {
-                return res.status(400).json({
-                    message: "Please fill in all fields",
-                    success: false
-                });
-            }
-        }
-
-
-        // Compare the password
-        if (role === 'Student') {
-            const isPasswordValid = await bcrypt.compare(password, user.password);
-            if (!isPasswordValid) {
-                return res.status(400).json({
-                    message: "Invalid email or password",
-                    success: false
-                });
-            }
+        if (user.role === "Student" || user.role === "Admin") {
+            isPasswordValid = await bcrypt.compare(password, user.password);
         } else {
-            const isPasswordValid = Number(password) === Number(user.password) ? true : false;
-
-            if (!isPasswordValid) {
-                return res.status(400).json({
-                    message: "Invalid email or password",
-                    success: false
-                });
-            }
+            isPasswordValid = password === user.password; // Admin, Faculty, Student Coordinator passwords are not hashed
         }
 
-
-        // Check if the role is correct
-        if (role !== user.role) {
+        if (!isPasswordValid) {
             return res.status(400).json({
-                message: "Invalid role",
+                message: "Invalid user ID or password",
                 success: false
             });
         }
 
-        // Generate a JWT token
+        // Generate JWT token
         const token = jwt.sign(
             {
                 userId: user._id,
             },
-            process.env.SECRET_KEY, // Store your secret key in environment variables
-            { expiresIn: '1d' }
+            process.env.SECRET_KEY, // Store secret key in environment variables
+            { expiresIn: "1d" }
         );
 
-        // Create a new user object without modifying the original `user`
+        // User data without sensitive password
         const userData = {
             _id: user._id,
             userId: user.userId,
@@ -215,12 +146,17 @@ export const login = async (req, res) => {
             profile: user.profile
         };
 
-        return res.status(200).cookie("token", token,
-            { maxAge: 1 * 24 * 60 * 60 * 1000, httpOnly: true, sameSite: 'strict' })
+        return res
+            .status(200)
+            .cookie("token", token, {
+                maxAge: 24 * 60 * 60 * 1000,
+                httpOnly: true,
+                sameSite: "strict",
+            })
             .json({
                 message: `Welcome back ${userData.fullname}`,
                 user: userData,
-                success: true
+                success: true,
             });
 
     } catch (error) {
@@ -228,6 +164,9 @@ export const login = async (req, res) => {
         return res.status(500).json({ message: "Internal server error", success: false });
     }
 };
+
+
+
 
 
 export const logout = async (req, res) => {
@@ -305,3 +244,64 @@ export const updateProfile = async (req, res) => {
         });
     }
 };
+
+
+
+export const updateCoverPhoto = async (req, res) => {
+    try {
+      // Check if file exists
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: "Please upload an image"
+        });
+      }
+
+    //   console.log(req.file);
+
+      
+  
+      const user = await User.findById(req.id);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found"
+        });
+      }
+  
+      // Delete old cover photo from cloudinary if it exists
+      if (user.profile.coverPhoto?.public_id) {
+        await cloudinary.uploader.destroy(user.profile.coverPhoto.public_id);
+      }
+  
+      // Convert file to DataURI
+      const fileUri = getDataUri(req.file);
+  
+      // Upload new image to cloudinary
+      const result = await cloudinary.uploader.upload(fileUri.content, {
+        folder: "cover_photos"
+      });
+  
+      // Update user's cover photo
+      user.profile.coverPhoto = {
+        public_id: result.public_id,
+        url: result.secure_url
+      };
+  
+      await user.save();
+  
+      res.status(200).json({
+        success: true,
+        message: "Cover photo updated successfully",
+        coverPhoto: user.profile.coverPhoto
+      });
+  
+    } catch (error) {
+      console.error("Error in updateCoverPhoto:", error);
+      res.status(500).json({
+        success: false,
+        message: "Error updating cover photo",
+        error: error.message
+      });
+    }
+  };

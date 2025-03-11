@@ -7,32 +7,35 @@ import { setSingleGame } from "@/redux/gameSlice";
 import { GAME_API_END_POINT, REGISTER_IN_GAME_API_END_POINT } from "@/utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
-
-// const allSkill = ["Speed", "Strength", "Flexibility"];
+import { 
+  Calendar, 
+  MapPin, 
+  Users, 
+  Trophy,
+  Clock,
+  CheckCircle,
+  XCircle,
+  ArrowLeft
+} from "lucide-react";
 
 function GameDetails() {
-  
   const dispatch = useDispatch();
   const params = useParams();
   const gameId = params.id;
-  const {singleGame} = useSelector(store=>store.game);
-  const {user} = useSelector(store=>store.auth);
-  const isInitiallyAplied = singleGame?.players?.some(apply=>apply.student === user?._id) || false;
-  const [isApplied,setIsApplied] = useState(isInitiallyAplied);
+  const { singleGame } = useSelector(store => store.game);
+  const { user } = useSelector(store => store.auth);
+  const isInitiallyAplied = singleGame?.players?.some(apply => apply.student === user?._id) || false;
+  const [isApplied, setIsApplied] = useState(isInitiallyAplied);
 
-  const applyGameHandler = async () =>{
+  const applyGameHandler = async () => {
     try {
-      
-      const res = await axios(`${REGISTER_IN_GAME_API_END_POINT}/registor/${gameId}`,{withCredentials:true});
-      // console.log(res);
-      
-      if(res.data.success){
-        setIsApplied(true); // update the local state
-        const updatedSingleGame = {...singleGame,players:[...singleGame.players,{student:user?._id}]}
-        dispatch(setSingleGame(updatedSingleGame)); // real time ui and tota player update.
+      const res = await axios(`${REGISTER_IN_GAME_API_END_POINT}/registor/${gameId}`, { withCredentials: true });
+      if (res.data.success) {
+        setIsApplied(true);
+        const updatedSingleGame = { ...singleGame, players: [...singleGame.players, { student: user?._id }] }
+        dispatch(setSingleGame(updatedSingleGame));
         toast.success(res.data.message);
       }
-
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
@@ -40,87 +43,136 @@ function GameDetails() {
   }
 
   useEffect(() => {
-    const fetchSingleGame = async () =>{
-        try {
-            const res = await axios.get(`${GAME_API_END_POINT}/getgame/${gameId}`,{withCredentials:true});
-            console.log(res);
-            
-            if(res.data.success){
-                dispatch(setSingleGame(res.data.game));
-                setIsApplied(res.data.game.players.some(apply=>apply.student === user._id));
-            }
-
-        } catch (error) {
-            console.log(error);
+    const fetchSingleGame = async () => {
+      try {
+        const res = await axios.get(`${GAME_API_END_POINT}/getgame/${gameId}`, { withCredentials: true });
+        if (res.data.success) {
+          dispatch(setSingleGame(res.data.game));
+          setIsApplied(res.data.game.players.some(apply => apply.student === user._id));
         }
+      } catch (error) {
+        console.log(error);
+      }
     }
     fetchSingleGame();
-  },[gameId,dispatch,user?._id]);
+  }, [gameId, dispatch, user?._id]);
 
   return (
-    <div className="max-w-5xl mx-auto my-10 shadow-lg p-5 rounded-md">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-bold text-lg">{singleGame?.gameName}</h1>
-        </div>
-
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Back Button */}
         <Button
-          onClick = {isInitiallyAplied ? null : applyGameHandler}
-          className={`rounded-md ${
-            isInitiallyAplied
-              ? "bg-gray-600 cursor-not-allowed"
-              : "bg-[#903b3b] hover:bg-[#d98825]"
-          }`}
+          variant="ghost"
+          className="mb-6 text-gray-600 hover:text-gray-900"
+          onClick={() => window.history.back()}
         >
-          {isInitiallyAplied ? "Already Applied" : "Apply Now"}
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Games
         </Button>
-      </div>
 
-      <div>
-        <h1 className="border-b-2 border-b-gray-300 font-medium py-4">
-          Game Details
-        </h1>
-        <div className="my-4">
-          <h1 className="font-bold my-1 flex items-center gap-2">
-            Name:
-            <div>
-              <span className="p-4 font-normal text-gray-800">{singleGame?.gameName}</span>
+        {/* Main Content Card */}
+        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+          {/* Header Section */}
+          <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-6 py-8 text-white">
+            <div className="flex justify-between items-start">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">{singleGame?.gameName}</h1>
+                <p className="text-blue-100 flex items-center">
+                  <Trophy className="h-5 w-5 mr-2" />
+                  {singleGame?.gameCatagory}
+                </p>
+              </div>
+              <Button
+                onClick={isInitiallyAplied ? null : applyGameHandler}
+                className={`px-6 py-3 rounded-full transition-all duration-300 ${
+                  isInitiallyAplied
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-green-500 hover:bg-green-600"
+                }`}
+              >
+                {isInitiallyAplied ? (
+                  <div className="flex items-center">
+                    <CheckCircle className="h-5 w-5 mr-2" />
+                    Already Applied
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    <Trophy className="h-5 w-5 mr-2" />
+                    Apply Now
+                  </div>
+                )}
+              </Button>
             </div>
-          </h1>
-          <h1 className="font-bold my-1">
-            Category:
-            <span className="p-4 font-normal text-gray-800">{singleGame?.gameCatagory}</span>
-          </h1>
-          <h1 className="font-bold my-1 flex items-center gap-2 ">
-            Required Skill:
-            <div className="flex items-center gap-2">
-              {singleGame?.skills.map((skill, index) => (
-                <Badge className="text-blue-800 font-bold" variant="ghost">
-                  {skill}
-                </Badge>
-              ))}
+          </div>
+
+          {/* Details Section */}
+          <div className="p-6">
+            {/* Skills Section */}
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold mb-3 text-gray-700">Required Skills</h2>
+              <div className="flex flex-wrap gap-2">
+                {singleGame?.skills.map((skill, index) => (
+                  <Badge 
+                    key={index} 
+                    className="px-4 py-2 bg-blue-50 text-blue-700 rounded-full"
+                  >
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
             </div>
-          </h1>
-          <h1 className="font-bold my-1">
-            Description:
-            <span className="p-4 font-normal text-gray-800">
-              {singleGame?.description}
-            </span>
-          </h1>
-          <h1 className="font-bold my-1">
-            Location:
-            <span className="p-4 font-normal text-gray-800">
-              {singleGame?.location}
-            </span>
-          </h1>
-          <h1 className="font-bold my-1">
-            Total Players:
-            <span className="p-4 font-normal text-gray-800">{singleGame?.players.length}</span>
-          </h1>
-          <h1 className="font-bold my-1">
-            Posted Date:
-            <span className="p-4 font-normal text-gray-800">{singleGame?.createdAt.split("T")[0]}</span>
-          </h1>
+
+            {/* Description Section */}
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold mb-3 text-gray-700">Description</h2>
+              <p className="text-gray-600 leading-relaxed">
+                {singleGame?.description}
+              </p>
+            </div>
+
+            {/* Game Information Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <MapPin className="h-6 w-6 text-blue-600" />
+                <div>
+                  <p className="text-sm text-gray-500">Location</p>
+                  <p className="font-medium text-gray-900">{singleGame?.location}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <Users className="h-6 w-6 text-blue-600" />
+                <div>
+                  <p className="text-sm text-gray-500">Total Players</p>
+                  <p className="font-medium text-gray-900">{singleGame?.players.length}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <Calendar className="h-6 w-6 text-blue-600" />
+                <div>
+                  <p className="text-sm text-gray-500">Posted Date</p>
+                  <p className="font-medium text-gray-900">
+                    {new Date(singleGame?.createdAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+                <Clock className="h-6 w-6 text-blue-600" />
+                <div>
+                  <p className="text-sm text-gray-500">Registration Status</p>
+                  <p className="font-medium text-gray-900">
+                    {isInitiallyAplied ? "Registered" : "Open"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

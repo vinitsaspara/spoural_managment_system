@@ -12,7 +12,7 @@ function useGetAllGame() {
     const fetchAllGames = async () =>{
         try {
             const res = await axios.get(`${GAME_API_END_POINT}/getgame`,{withCredentials:true});
-            // console.log(res);
+            console.log(res);
             
             if(res.data.success){
                 dispatch(setAllGames(res.data.games));
