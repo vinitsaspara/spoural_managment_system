@@ -1,7 +1,7 @@
 import { Registration } from "../models/registration.model.js";
 import { Game } from "../models/game.model.js"
 import { User } from "../models/user.model.js";
-import { populate } from "dotenv";
+// import { populate } from "dotenv";
 
 export const registorGame = async (req, res) => {
     try {
@@ -307,5 +307,45 @@ export const getAllPlayers = async (req, res) => {
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Server error", success: false });
+    }
+};
+
+export const getUserAppliedGames = async (req, res) => {
+    try {
+        const userId = req.id;
+
+        const registrations = await Registration.find({ student: userId })
+            .populate({
+                path: 'game createdAt',
+                select: 'gameName location maxPlayers'
+            })
+            .sort({ createdAt: -1 });
+
+        if (!registrations) {
+            return res.status(200).json({
+                success: true,
+                appliedGames: []
+            });
+        }
+
+        const appliedGames = registrations.map(reg => ({
+            id: reg._id,
+            gameName: reg.game?.gameName || 'Unknown Game',
+            venue: reg.game?.location ,
+            status: reg.status || 'pending',
+            appliedAt: reg.createdAt
+        }));
+
+        return res.status(200).json({
+            success: true,
+            appliedGames
+        });
+
+    } catch (error) {
+        console.error("Error in getUserAppliedGames:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
     }
 };

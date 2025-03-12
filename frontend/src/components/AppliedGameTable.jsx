@@ -1,44 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { REGISTER_IN_GAME_API_END_POINT, USER_API_END_POINT } from "@/utils/constant";
+import { format } from "date-fns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Badge } from './ui/badge';
 import { Calendar, Trophy, Target, CheckCircle, Clock, XCircle } from 'lucide-react';
 
 function AppliedGameTable() {
-  // Sample data - replace with your actual data
-  const allAppliedGames = [
-    {
-      date: '2024-03-12',
-      gameName: 'Cricket',
-      category: 'Outdoor Game',
-      status: 'selected',
-      venue: 'Main Ground',
-      time: '14:00'
-    },
-    {
-      date: '2024-03-15',
-      gameName: 'Chess',
-      category: 'Indoor Game',
-      status: 'pending',
-      venue: 'Sports Complex',
-      time: '10:00'
-    },
-    {
-      date: '2024-03-18',
-      gameName: 'Football',
-      category: 'Outdoor Game',
-      status: 'rejected',
-      venue: 'Football Ground',
-      time: '16:00'
-    },
-    {
-      date: '2024-03-20',
-      gameName: 'Table Tennis',
-      category: 'Indoor Game',
-      status: 'selected',
-      venue: 'Indoor Hall',
-      time: '11:30'
-    },
-  ];
+  const [appliedGames, setAppliedGames] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAppliedGames = async () => {
+      try {
+        const response = await axios.get(
+          `${REGISTER_IN_GAME_API_END_POINT}/applied-games`,
+          { withCredentials: true }
+        );
+
+        if (response.data.success) {
+          setAppliedGames(response.data.appliedGames);
+        }
+      } catch (error) {
+        console.error("Error fetching applied games:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAppliedGames();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (appliedGames.length === 0) {
+    return <div>No games applied yet.</div>;
+  }
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -68,93 +67,89 @@ function AppliedGameTable() {
     }
   };
 
-  if (allAppliedGames.length <= 0) {
-    return (
-      <div className="text-center py-12 bg-gray-50 rounded-lg">
-        <Trophy className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900">No Games Applied</h3>
-        <p className="text-gray-500 mt-2">You haven't applied to any games yet.</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="bg-white rounded-lg overflow-hidden">
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-gray-50">
-              <TableHead className="w-[150px]">Date & Time</TableHead>
-              <TableHead>Game Details</TableHead>
-              <TableHead className="w-[150px]">Venue</TableHead>
-              <TableHead className="w-[120px] text-right">Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {allAppliedGames.map((game, index) => (
-              <TableRow 
-                key={index}
-                className="hover:bg-gray-50 transition-colors"
-              >
-                <TableCell className="font-medium">
-                  <div className="flex items-start gap-2">
-                    <Calendar className="w-4 h-4 text-gray-400 mt-1" />
-                    <div>
-                      <div className="font-medium text-gray-900">
-                        {new Date(game.date).toLocaleDateString('en-US', {
-                          day: 'numeric',
-                          month: 'short',
-                          year: 'numeric'
-                        })}
-                      </div>
-                      <div className="text-sm text-gray-500">{game.time}</div>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div>
-                    <div className="font-medium text-gray-900">{game.gameName}</div>
-                    <div className="text-sm text-gray-500 flex items-center gap-1">
-                      <Target className="w-3 h-3" />
-                      {game.category}
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="text-sm text-gray-600">
-                    {game.venue}
-                  </div>
-                </TableCell>
-                <TableCell className="text-right">
-                  {getStatusBadge(game.status)}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+    <div className="bg-white rounded-xl shadow-sm p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-lg font-semibold text-gray-900">Applied Games</h2>
+        <Badge className="bg-blue-50 text-blue-700">
+        {appliedGames.filter(g => g.status === 'selected').length} Games
+        </Badge>
       </div>
 
-      {/* Summary Section */}
-      <div className="bg-gray-50 px-6 py-4 border-t">
-        <div className="flex items-center justify-between text-sm text-gray-500">
-          <div>Total Applications: {allAppliedGames.length}</div>
-          <div className="flex gap-4">
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              Selected: {allAppliedGames.filter(g => g.status === 'selected').length}
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-              Pending: {allAppliedGames.filter(g => g.status === 'pending').length}
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-red-500"></div>
-              Rejected: {allAppliedGames.filter(g => g.status === 'rejected').length}
+      <div className="bg-white rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-gray-50">
+                <TableHead className="w-[150px]">Applyed Date</TableHead>
+                <TableHead>Game Details</TableHead>
+                <TableHead className="w-[150px]">Venue</TableHead>
+                <TableHead className="w-[120px] text-right">Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {appliedGames.map((game) => (
+                <TableRow
+                  key={game.id}
+                  className="hover:bg-gray-50 transition-colors"
+                >
+                  <TableCell className="font-medium">
+                    <div className="flex items-start gap-2">
+                      <Calendar className="w-4 h-4 text-gray-400 mt-1" />
+                      <div>
+                        <div className="font-medium text-gray-900">
+                          {game.appliedAt.split('T')[0]}
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div>
+                      <div className="font-medium text-gray-900">{game.gameName}</div>
+                      <div className="text-sm text-gray-500 flex items-center gap-1">
+                        <Target className="w-3 h-3" />
+                        {game.gameName}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="text-sm text-gray-600">
+                      {game.venue}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {getStatusBadge(game.status)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Summary Section */}
+        <div className="bg-gray-50 px-6 py-4 border-t">
+          <div className="flex items-center justify-between text-sm text-gray-500">
+            <div>Total Applications: {appliedGames.length}</div>
+            <div className="flex gap-4">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                Selected: {appliedGames.filter(g => g.status === 'selected').length}
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                Pending: {appliedGames.filter(g => g.status === 'pending').length}
+              </div>
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                Rejected: {appliedGames.filter(g => g.status === 'rejected').length}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    //  </div >
+    // </div >
   );
 }
 

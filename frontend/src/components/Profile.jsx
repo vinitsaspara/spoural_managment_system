@@ -24,12 +24,12 @@ function Profile() {
   const handleCoverPhotoChange = async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
-  
+
     try {
       setIsUploading(true);
       const formData = new FormData();
       formData.append('file', file); // Changed from 'coverPhoto' to 'file' to match multer config
-  
+
       const response = await axios.put(
         `${USER_API_END_POINT}/profile/coverimg`,
         formData,
@@ -40,7 +40,7 @@ function Profile() {
           withCredentials: true,
         }
       );
-  
+
       if (response.data.success) {
         dispatch(setUser({
           ...user,
@@ -62,10 +62,10 @@ function Profile() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
-      
+
       {/* Hero Section with Cover Photo */}
       <div className="relative h-[250px]">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${user?.profile?.coverPhoto?.url || '/default-cover.jpg'})`
@@ -112,7 +112,7 @@ function Profile() {
               <Pen className="h-4 w-4 text-white" />
             </Button>
           </div>
-          
+
           <div className="pb-4">
             <h1 className="text-2xl font-bold text-gray-900">{user?.fullname}</h1>
             <p className="text-gray-600 mt-1">{user?.profile?.bio || "No bio added yet"}</p>
@@ -170,15 +170,7 @@ function Profile() {
           {/* Right Content Area */}
           <div className="lg:col-span-2">
             {/* Applied Games Section */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-gray-900">Applied Games</h2>
-                <Badge className="bg-blue-50 text-blue-700">
-                  {user?.appliedGames?.length || 0} Games
-                </Badge>
-              </div>
-              <AppliedGameTable />
-            </div>
+            <AppliedGameTable />
           </div>
         </div>
       </div>
