@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { REGISTER_IN_GAME_API_END_POINT, USER_API_END_POINT } from "@/utils/constant";
-import { format } from "date-fns";
+import { REGISTER_IN_GAME_API_END_POINT } from "@/utils/constant.js";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Badge } from './ui/badge';
-import { Calendar, Trophy, Target, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { Calendar, Target, CheckCircle, Clock, XCircle } from 'lucide-react';
 
 function AppliedGameTable() {
   const [appliedGames, setAppliedGames] = useState([]);
