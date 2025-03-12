@@ -4,6 +4,10 @@ import {User} from '../models/user.model.js'; // Adjust the path to your user mo
 const isStudentCordinator = async (req, res, next) => {
     try {
         // Extract the token from cookies
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/Harsh
         const token = req?.cookies?.token;
         console.log(token);
         
