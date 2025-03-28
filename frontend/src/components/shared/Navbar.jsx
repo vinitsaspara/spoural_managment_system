@@ -48,16 +48,19 @@ function Navbar() {
   let navLinks;
   if (user && user.role === "Admin") {
     navLinks = [
+      { to: "/admin", label: "Home", icon: Home },
       { to: "/admin/members", label: "Members", icon: Users },
       { to: "/admin/game", label: "Games", icon: GamepadIcon },
     ];
   } else if (user && user.role === "Faculty") {
     navLinks = [
+      { to: "/facultyhome", label: "Home", icon: Home },
       { to: "/faculty", label: "Faculty", icon: Users },
       { to: "/faculty/allplayer", label: "Selected Players", icon: Trophy },
     ];
   } else if (user && user.role === "StudentCoordinator") {
     navLinks = [
+      { to: "/studentCoordinatorhome", label: "Home", icon: Home },
       { to: "/studentCoordinator", label: "Games", icon: GamepadIcon }
     ];
   } else {

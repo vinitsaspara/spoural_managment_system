@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
-import {User} from '../models/user.model.js'; // Adjust the path to your user model
+import { User } from '../models/user.model.js'; // Adjust the path to your user model
 
 const isStudentCordinator = async (req, res, next) => {
     try {
         // Extract the token from cookies
         const token = req?.cookies?.token;
         console.log(token);
-        
+
 
         if (!token) {
             return res.status(401).json({ message: "Unauthorized: No token provided" });
@@ -28,7 +28,7 @@ const isStudentCordinator = async (req, res, next) => {
         }
 
         // Attach the user to the request object for further use
-        req.id = user._id;        
+        req.id = user._id;
 
         // Proceed to the next middleware or route handler
         next();

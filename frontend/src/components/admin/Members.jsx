@@ -11,27 +11,31 @@ import { setSearchMember } from "@/redux/adminSlice";
 function Members() {
   useGetAllMembres();
 
-  const [input,setInput] = useState("");
+  const [input, setInput] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  useEffect(()=>{
-      dispatch(setSearchMember(input));
-  },[input])
+  useEffect(() => {
+    dispatch(setSearchMember(input));
+  }, [input]);
 
   return (
     <div>
       <Navbar />
       <div className="p-5 mt-5 rounded-md max-w-5xl mx-auto shadow-lg">
         <div className="flex items-center justify-between my-5">
-          <Input 
-          className="w-fit" placeholder="Filter by name"
-          onChange = {(e)=>setInput(e.target.value)}
+          <Input
+            className="w-fit"
+            placeholder="Filter by name"
+            onChange={(e) => setInput(e.target.value)}
           ></Input>
-          <Button onClick={() => navigate("/admin/members/add")}>
+          <Button
+            className="bg-blue-200 text-blue-600 hover:bg-blue-100"
+            onClick={() => navigate("/admin/members/add")}
+          >
             New Member
           </Button>
         </div>
-        <MembersTable/>
+        <MembersTable />
       </div>
     </div>
   );

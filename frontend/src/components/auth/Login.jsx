@@ -34,7 +34,19 @@ function Login() {
       });
       if (res.data.success) {
         dispatch(setUser(res.data.user));
-        navigate("/");
+
+        // here i want to give if condition for controll the home page of each role
+        if (res.data.user.role === "Admin") {
+          navigate("/admin");
+        }
+        else if (res.data.user.role === "StudentCoordinator") {
+          navigate("/studentcoordinatorhome");
+        }
+        else if (res.data.user.role === "Faculty") {
+          navigate("/facultyhome");
+        }else{
+          navigate("/");
+        }
         toast.success(res.data.message);
       }
     } catch (error) {
