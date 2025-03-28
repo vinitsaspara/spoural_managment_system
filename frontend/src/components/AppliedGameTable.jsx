@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { REGISTER_IN_GAME_API_END_POINT } from "@/utils/constant.js";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./ui/table";
-import { Badge } from "./ui/badge";
-import { Calendar, Target, CheckCircle, Clock, XCircle } from "lucide-react";
+import { REGISTER_IN_GAME_API_END_POINT, USER_API_END_POINT } from "@/utils/constant";
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
+import { Badge } from './ui/badge';
+import { Calendar, Trophy, Target, CheckCircle, Clock, XCircle } from 'lucide-react';
 
 function AppliedGameTable() {
   const [appliedGames, setAppliedGames] = useState([]);
@@ -78,7 +72,7 @@ function AppliedGameTable() {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-gray-900">Applied Games</h2>
         <Badge className="bg-blue-50 text-blue-700">
-          {appliedGames.filter((g) => g.status === "selected").length} Games
+        {appliedGames.filter(g => g.status === 'selected').length} Games
         </Badge>
       </div>
 
@@ -104,16 +98,14 @@ function AppliedGameTable() {
                       <Calendar className="w-4 h-4 text-gray-400 mt-1" />
                       <div>
                         <div className="font-medium text-gray-900">
-                          {game.appliedAt.split("T")[0]}
+                          {game.appliedAt.split('T')[0]}
                         </div>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <div>
-                      <div className="font-medium text-gray-900">
-                        {game.gameName}
-                      </div>
+                      <div className="font-medium text-gray-900">{game.gameName}</div>
                       <div className="text-sm text-gray-500 flex items-center gap-1">
                         <Target className="w-3 h-3" />
                         {game.gameName}
@@ -121,7 +113,9 @@ function AppliedGameTable() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="text-sm text-gray-600">{game.venue}</div>
+                    <div className="text-sm text-gray-600">
+                      {game.venue}
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     {getStatusBadge(game.status)}
@@ -139,18 +133,15 @@ function AppliedGameTable() {
             <div className="flex gap-4">
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                Selected:{" "}
-                {appliedGames.filter((g) => g.status === "selected").length}
+                Selected: {appliedGames.filter(g => g.status === 'selected').length}
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                Pending:{" "}
-                {appliedGames.filter((g) => g.status === "pending").length}
+                Pending: {appliedGames.filter(g => g.status === 'pending').length}
               </div>
               <div className="flex items-center gap-1">
                 <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                Rejected:{" "}
-                {appliedGames.filter((g) => g.status === "rejected").length}
+                Rejected: {appliedGames.filter(g => g.status === 'rejected').length}
               </div>
             </div>
           </div>
