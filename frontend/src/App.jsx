@@ -24,6 +24,8 @@ import AllSelectedStudent from "./faculty/AllSelectedStudent";
 import AdminHome from "./components/admin/AdminHome";
 import FacultyHome from "./faculty/FacultyHome";
 import StudentCoordinatorHome from "./studentCoordinator/StudentCoordinatorHome";
+import GameSchedule from "./components/admin/GameSchedule";
+import AddSchedule from "./components/admin/AddSchedual";
 
 const appRouter = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -42,6 +44,8 @@ const appRouter = createBrowserRouter([
   { path: "/admin/game", element: <GameController /> },
   { path: "/admin/game/details/:id", element: <AdminGameDetails /> },
   { path: "/admin/game/create", element: <AdminCreateGame /> },
+  { path: "/admin/schedual", element: <GameSchedule/>},
+  { path: "/admin/addschedual", element: <AddSchedule/>},
 
   // Faculty URLs
   { path: "/facultyhome", element: <FacultyHome /> },
