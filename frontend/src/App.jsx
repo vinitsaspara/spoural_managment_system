@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import "./App.css";
@@ -22,35 +22,47 @@ import ViweAppliedStudent from "./studentCoordinator/ViweAppliedStudent";
 import ViweSelectedStudent from "./faculty/ViweSelectedStudent";
 import AllSelectedStudent from "./faculty/AllSelectedStudent";
 
+const Layout = () => {
+  return (
+    <>
+      <Outlet />
+    </>
+  );
+};
+
 const appRouter = createBrowserRouter([
-  { path: "/", element: <Home /> },
-  { path: "/login", element: <Login /> },
-  { path: "/signup", element: <Signup /> },
-  { path: "/games", element: <Games /> },
-  { path: "/details/:id", element: <GameDetails /> },
-  { path: "/browse", element: <Browse /> },
-  { path: "/profile", element: <Profile /> },
+  {
+    element: <Layout />,
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "/login", element: <Login /> },
+      { path: "/signup", element: <Signup /> },
+      { path: "/games", element: <Games /> },
+      { path: "/details/:id", element: <GameDetails /> },
+      { path: "/browse", element: <Browse /> },
+      { path: "/profile", element: <Profile /> },
 
-  // Admin URLs
-  { path: "/admin/members", element: <Members /> },
-  { path: "/admin/members/add", element: <MemberAdd /> },
-  { path: "/admin/member/details", element: <MemberDetails /> },
-  { path: "/admin/game", element: <GameController /> },
-  { path: "/admin/game/details/:id", element: <AdminGameDetails /> },
-  { path: "/admin/game/create", element: <AdminCreateGame /> },
+      // Admin URLs
+      { path: "/admin/members", element: <Members /> },
+      { path: "/admin/members/add", element: <MemberAdd /> },
+      { path: "/admin/member/details", element: <MemberDetails /> },
+      { path: "/admin/game", element: <GameController /> },
+      { path: "/admin/game/details/:id", element: <AdminGameDetails /> },
+      { path: "/admin/game/create", element: <AdminCreateGame /> },
 
-  // Faculty URLs
-  { path: "/faculty", element: <Faculty /> },
-  { path: "/faculty/viewselectedStudent/:id", element: <ViweSelectedStudent /> },
-  { path: "/faculty/allplayer", element: <AllSelectedStudent /> },
+      // Faculty URLs
+      { path: "/faculty", element: <Faculty /> },
+      { path: "/faculty/viewselectedStudent/:id", element: <ViweSelectedStudent /> },
+      { path: "/faculty/allplayer", element: <AllSelectedStudent /> },
 
-  // Student Coordinator URLs
-  { path: "/studentCoordinator", element: <StudentCoordinator /> },
-  { path: "/viweAppliedStudent/:id", element: <ViweAppliedStudent /> },
+      // Student Coordinator URLs
+      { path: "/studentCoordinator", element: <StudentCoordinator /> },
+      { path: "/viweAppliedStudent/:id", element: <ViweAppliedStudent /> },
+    ],
+  },
 ]);
 
 function App() {
- 
   return <RouterProvider router={appRouter} />;
 }
 

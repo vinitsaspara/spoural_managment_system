@@ -16,7 +16,7 @@ function Games() {
   return (
     <div>
       <Navbar />
-      <div className="max-w-6xl mx-auto mt-5">
+      <div className="max-w-6xl mx-auto  mt-20">
         <div className="flex gap-5">
           <div className="w-[20%]">
             <FilterGameCard />

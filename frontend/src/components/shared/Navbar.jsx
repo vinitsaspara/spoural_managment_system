@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
@@ -27,6 +27,17 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const logoutHandler = async () => {
     try {
@@ -74,12 +85,12 @@ function Navbar() {
   const userSection = !user ? (
     <div className="flex items-center gap-3">
       <Link to="/login">
-        <Button variant="ghost" className="text-gray-200 hover:text-white hover:bg-white/10">
+        <Button variant="ghost" className="text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-200">
           Login
         </Button>
       </Link>
       <Link to="/signup">
-        <Button className="bg-white text-blue-600 hover:bg-gray-100">
+        <Button className="bg-white text-blue-600 hover:bg-gray-100 transition-all duration-200">
           Sign Up
         </Button>
       </Link>
@@ -89,12 +100,12 @@ function Navbar() {
       <PopoverTrigger asChild>
         <Button 
           variant="ghost" 
-          className="flex items-center gap-2 hover:bg-white/10"
+          className="flex items-center gap-2 hover:bg-white/10 transition-all duration-200"
         >
           <Avatar className="h-8 w-8 border-2 border-white/20">
             <AvatarImage src={user?.profile.profilePicture} alt={user?.fullname} />
           </Avatar>
-          <span className="text-sm font-medium text-gray-200">{user?.fullname}</span>
+          <span className="text-sm font-medium text-gray-900">{user?.fullname}</span>
           <ChevronDown size={16} className="text-gray-400" />
         </Button>
       </PopoverTrigger>
@@ -103,7 +114,7 @@ function Navbar() {
           {user && user.role !== "Admin" && (
             <Button 
               variant="ghost" 
-              className="flex items-center gap-2 justify-start hover:bg-gray-100 rounded-lg"
+              className="flex items-center gap-2 justify-start hover:bg-gray-100 rounded-lg transition-all duration-200"
               asChild
             >
               <Link to="/profile">
@@ -114,7 +125,7 @@ function Navbar() {
           )}
           <Button 
             variant="ghost" 
-            className="flex items-center gap-2 justify-start text-red-600 hover:bg-red-50 hover:text-red-700 rounded-lg"
+            className="flex items-center gap-2 justify-start text-red-600 hover:bg-red-50 hover:text-red-700 rounded-lg transition-all duration-200"
             onClick={logoutHandler}
           >
             <LogOut size={18} />
@@ -126,13 +137,19 @@ function Navbar() {
   );
 
   return (
-    <nav className="bg-gradient-to-r from-blue-700 to-blue-900 border-b border-white/10">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      scrolled 
+        ? 'bg-white/80 backdrop-blur-md shadow-lg' 
+        : 'bg-gradient-to-r from-blue-700 to-blue-900'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo and Desktop Navigation */}
           <div className="flex items-center gap-8">
             <Link to="/" className="flex-shrink-0">
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className={`text-2xl font-bold transition-colors duration-300 ${
+                scrolled ? 'text-blue-600' : 'text-white'
+              }`}>
                 Spoural <span className="text-blue-300">Games</span>
               </h1>
             </Link>
@@ -141,10 +158,14 @@ function Navbar() {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors duration-200 ${
+                  className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-200 ${
                     isActive(link.to)
-                      ? 'bg-white/10 text-white'
-                      : 'text-gray-300 hover:text-white hover:bg-white/5'
+                      ? scrolled 
+                        ? 'bg-blue-50 text-blue-600' 
+                        : 'bg-white/10 text-white'
+                      : scrolled
+                        ? 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                        : 'text-gray-300 hover:text-white hover:bg-white/5'
                   }`}
                 >
                   <link.icon size={18} />
@@ -164,7 +185,9 @@ function Navbar() {
             <Button
               variant="ghost"
               size="sm"
-              className="text-gray-300 hover:text-white"
+              className={`transition-colors duration-200 ${
+                scrolled ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-white'
+              }`}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? (
@@ -179,16 +202,22 @@ function Navbar() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-blue-800">
+        <div className={`md:hidden transition-all duration-300 ${
+          scrolled ? 'bg-white' : 'bg-blue-800'
+        }`}>
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className={`px-3 py-2 rounded-md text-base font-medium flex items-center gap-2 ${
+                className={`px-3 py-2 rounded-md text-base font-medium flex items-center gap-2 transition-all duration-200 ${
                   isActive(link.to)
-                    ? 'bg-white/10 text-white'
-                    : 'text-gray-300 hover:text-white hover:bg-white/5'
+                    ? scrolled 
+                      ? 'bg-blue-50 text-blue-600' 
+                      : 'bg-white/10 text-white'
+                    : scrolled
+                      ? 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                      : 'text-gray-300 hover:text-white hover:bg-white/5'
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -197,7 +226,7 @@ function Navbar() {
               </Link>
             ))}
           </div>
-          <div className="border-t border-white/10 px-4 py-3">
+          <div className={`border-t ${scrolled ? 'border-gray-200' : 'border-white/10'} px-4 py-3`}>
             {userSection}
           </div>
         </div>
