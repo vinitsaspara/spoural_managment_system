@@ -63,7 +63,7 @@ function SCGameCards({game}) {
         className="w-full bg-white text-blue-900 hover:bg-blue-100 transition-colors duration-200 flex items-center justify-center space-x-2" 
         onClick={() => navigate(`/viweAppliedStudent/${game?._id}`)}
       >
-        <span>Viwe Applied Student</span>
+        <span>View Applied Student</span>
       </Button>
     </div>
   );
