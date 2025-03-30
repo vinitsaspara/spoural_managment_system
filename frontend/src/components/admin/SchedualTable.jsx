@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Calendar, Clock, MapPin, Trophy, Users, Search } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { setSingleSchedule } from "@/redux/adminSlice";
+import { motion, AnimatePresence } from "framer-motion";
 
 function ScheduleTable() {
   const { allSchedules, searchSchedule } = useSelector((store) => store.admin);
-  const { user } = useSelector((state) => state.auth); // Get user role
+  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [filteredSchedules, setFilteredSchedules] = useState(allSchedules);
@@ -35,62 +36,120 @@ function ScheduleTable() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Game Schedules</h1>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 p-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="max-w-7xl mx-auto"
+      >
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg"
+            >
+              <Trophy className="h-6 w-6 text-white" />
+            </motion.div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-800">Game Schedules</h1>
+              <p className="text-gray-600">View and manage all scheduled games</p>
+            </div>
+          </div>
+        </div>
 
-      <div className="overflow-x-auto bg-white rounded-lg shadow">
-        <Table className="min-w-full divide-y divide-gray-200">
-          <TableCaption>List of scheduled games</TableCaption>
-          <TableHeader className="bg-gray-50">
-            <TableRow>
-              <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Game Name</TableHead>
-              <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teams</TableHead>
-              <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Match Date</TableHead>
-              <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Match Time</TableHead>
-              <TableHead className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Venue</TableHead>
-              {user?.role === "Admin" && ( // Only show action column for Admin
-                <TableHead className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</TableHead>
-              )}
-            </TableRow>
-          </TableHeader>
-
-          <TableBody className="bg-white divide-y divide-gray-200">
-            {filteredSchedules.map((schedule) => (
-              <TableRow key={schedule._id} className="hover:bg-gray-50 transition-colors duration-200">
-                <TableCell className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{schedule?.gameName}</TableCell>
-                <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{schedule?.teams.join(" vs ")}</TableCell>
-                <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(schedule?.matchDate).toISOString().split("T")[0]} {/* Shows only YYYY-MM-DD */}
-                </TableCell>
-                <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{schedule?.matchTime}</TableCell>
-                <TableCell className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{schedule?.venue}</TableCell>
-                
-                {/* Show Details button only for Admin */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="bg-white rounded-2xl shadow-xl overflow-hidden border-0 backdrop-blur-sm hover:shadow-2xl transition-all duration-300"
+        >
+          <Table>
+            <TableHeader className="bg-gradient-to-r from-blue-50 to-blue-100">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="font-semibold text-gray-700">Game Name</TableHead>
+                <TableHead className="font-semibold text-gray-700">Teams</TableHead>
+                <TableHead className="font-semibold text-gray-700">Match Date</TableHead>
+                <TableHead className="font-semibold text-gray-700">Match Time</TableHead>
+                <TableHead className="font-semibold text-gray-700">Venue</TableHead>
                 {user?.role === "Admin" && (
-                  <TableCell className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium cursor-pointer">
-                    <Popover>
-                      <PopoverTrigger>
-                        <MoreHorizontal className="w-5 h-5 text-gray-600" />
-                      </PopoverTrigger>
-                      <PopoverContent className="w-25 h-25 p-0 bg-blue-700 text-white">
-                        <Button
-                          onClick={() => detailsHandler(schedule)}
-                          variant="link"
-                          className="text-white"
-                        >
-                          Details
-                        </Button>
-                      </PopoverContent>
-                    </Popover>
-                  </TableCell>
+                  <TableHead className="font-semibold text-gray-700 text-right">Action</TableHead>
                 )}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+            </TableHeader>
+
+            <TableBody>
+              <AnimatePresence>
+                {filteredSchedules.map((schedule, index) => (
+                  <motion.tr
+                    key={schedule._id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2, delay: index * 0.05 }}
+                    className="group hover:bg-blue-50 transition-all duration-300"
+                  >
+                    <TableCell className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+                      {schedule?.gameName}
+                    </TableCell>
+                    <TableCell className="text-gray-700">
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4 text-gray-400" />
+                        {schedule?.teams.join(" vs ")}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-gray-700">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-gray-400" />
+                        {new Date(schedule?.matchDate).toISOString().split("T")[0]}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-gray-700">
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-gray-400" />
+                        {schedule?.matchTime}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-gray-700">
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-gray-400" />
+                        {schedule?.venue}
+                      </div>
+                    </TableCell>
+                    
+                    {user?.role === "Admin" && (
+                      <TableCell className="text-right">
+                        <Popover>
+                          <PopoverTrigger>
+                            <motion.div
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              className="inline-block p-2 rounded-full hover:bg-blue-100 transition-colors duration-300"
+                            >
+                              <MoreHorizontal className="w-5 h-5 text-gray-600" />
+                            </motion.div>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-40 p-2 bg-white rounded-xl shadow-lg border-0">
+                            <Button
+                              onClick={() => detailsHandler(schedule)}
+                              variant="ghost"
+                              className="w-full justify-start text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-300"
+                            >
+                              View Details
+                            </Button>
+                          </PopoverContent>
+                        </Popover>
+                      </TableCell>
+                    )}
+                  </motion.tr>
+                ))}
+              </AnimatePresence>
+            </TableBody>
+          </Table>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

@@ -21,7 +21,7 @@ function Members() {
   return (
     <div>
       <Navbar />
-      <div className="p-5 mt-5 rounded-md max-w-5xl mx-auto shadow-lg">
+      <div className="p-5  rounded-md max-w-5xl mx-auto mt-10 shadow-lg">
         <div className="flex items-center justify-between my-5">
           <Input
             className="w-fit"

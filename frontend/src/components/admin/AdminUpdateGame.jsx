@@ -51,7 +51,7 @@ function AdminUpdateGame() {
   return (
     <div>
       <Navbar />
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center mt-10">
         <form onSubmit={submitHandler} className=" my-8 p-5 border max-w-3xl mx-auto rounded-md shadow-lg border-gray-300">
           <div className="grid grid-cols-2 gap-3">
             <div>

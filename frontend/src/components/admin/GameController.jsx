@@ -57,7 +57,7 @@ function GameController() {
   return (
     <div>
       <Navbar />
-      <div className="p-5 rounded-md max-w-5xl mt-5 mx-auto shadow-lg">
+      <div className="p-5 rounded-md max-w-5xl  mx-auto shadow-lg mt-16">
         <div className="flex items-center justify-between my-5">
           <Input
             className="w-fit"

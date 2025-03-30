@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "@/components/ui/avatar";
 import { useSelector } from "react-redux";
+import Navbar from "../shared/Navbar";
 
 export default function AdminHome() {
   const navigate = useNavigate();
@@ -10,7 +11,8 @@ export default function AdminHome() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500 text-gray-900 flex flex-col items-center justify-center p-6">
-      <h1 className="text-5xl font-bold mb-8 text-blue-900">Admin Dashboard</h1>
+      <Navbar />
+      <h1 className="text-5xl font-bold mb-8 text-blue-900 mt-10">Admin Dashboard</h1>
       <p className="text-lg text-gray-700 mb-12 max-w-2xl text-center">
         Manage system operations, oversee faculty and student records, and ensure smooth administration.
       </p>
@@ -23,6 +25,7 @@ export default function AdminHome() {
             <div className="mt-4 flex flex-col gap-3">
               <Button onClick={() => navigate("/admin/members")} variant="outline" className="w-full">Add Member</Button>
               <Button onClick={() => navigate("/admin/game")} variant="outline" className="w-full">Add Games</Button>
+              <Button onClick={() => navigate("/admin/schedual")} variant="outline" className="w-full">Add Schadual</Button>
             </div>
           </CardContent>
         </Card>

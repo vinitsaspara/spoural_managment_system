@@ -3,19 +3,20 @@ import Navbar from "../shared/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Calendar, Clock, MapPin, Trophy, Users } from "lucide-react";
 import { SCHEDUAL_API_END_POINT } from "@/utils/constant";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 function AddSchedule() {
   const [input, setInput] = useState({
     gameName: "",
-    teams: ["", ""], // Fixing two team inputs
+    teams: ["", ""],
     matchDate: "",
     matchTime: "",
-    venue: "", // Default empty value for venue
+    venue: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -28,19 +29,16 @@ function AddSchedule() {
     "Central Loan",
   ];
 
-  // Handles input change for single fields
   const changeHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
 
-  // Handles input change for the teams array
   const handleTeamChange = (index, value) => {
     const newTeams = [...input.teams];
     newTeams[index] = value;
     setInput({ ...input, teams: newTeams });
   };
 
-  // Handles form submission
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -61,100 +59,179 @@ function AddSchedule() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       <Navbar />
-      <div className="flex items-center justify-center max-w-7xl mx-auto">
-        <form
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="flex items-center justify-center max-w-4xl mx-auto p-6 mt-10"
+      >
+        <motion.form
+          initial={{ scale: 0.95 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.3 }}
           onSubmit={submitHandler}
-          className="w-1/2 border-gray-200 rounded-md p-4 my-4 shadow-lg"
+          className="w-full bg-white rounded-2xl shadow-xl p-8 border-0 backdrop-blur-sm hover:shadow-2xl transition-all duration-300"
         >
-          <h1 className="font-bold text-xl mb-5">Add Game Schedule</h1>
-
-          {/* Game Name */}
-          <div className="my-2">
-            <Label>Game Name</Label>
-            <Input
-              type="text"
-              value={input.gameName}
-              name="gameName"
-              onChange={changeHandler}
-              placeholder="Cricket, Football..."
-              required
-            />
-          </div>
-
-          {/* Teams Input (Fixed to Two Teams) */}
-          <div className="my-2">
-            <Label>Teams</Label>
-            {input.teams.map((team, index) => (
-              <Input
-                key={index}
-                type="text"
-                value={team}
-                onChange={(e) => handleTeamChange(index, e.target.value)}
-                placeholder={`Team ${index + 1}`}
-                className="mb-2"
-                required
-              />
-            ))}
-          </div>
-
-          {/* Match Date */}
-          <div className="my-2">
-            <Label>Match Date</Label>
-            <Input
-              type="date"
-              value={input.matchDate}
-              name="matchDate"
-              onChange={changeHandler}
-              required
-            />
-          </div>
-
-          {/* Match Time */}
-          <div className="my-2">
-            <Label>Match Time</Label>
-            <Input
-              type="time"
-              value={input.matchTime}
-              name="matchTime"
-              onChange={changeHandler}
-              required
-            />
-          </div>
-
-          {/* Venue (Dropdown) */}
-          <div className="my-2">
-            <Label>Venue</Label>
-            <select
-              name="venue"
-              value={input.venue}
-              onChange={changeHandler}
-              className="w-full border rounded-md p-2"
-              required
+          <div className="flex items-center gap-3 mb-8">
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl shadow-lg"
             >
-              <option value="">Select Venue</option>
-              {venues.map((venue, index) => (
-                <option key={index} value={venue}>
-                  {venue}
-                </option>
-              ))}
-            </select>
+              <Trophy className="h-6 w-6 text-white" />
+            </motion.div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-800">Add Game Schedule</h1>
+              <p className="text-gray-600">Create a new match schedule</p>
+            </div>
           </div>
 
-          {/* Submit Button */}
-          {loading ? (
-            <Button className="w-full my-4" disabled>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Please wait...
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full my-4">
-              Add Schedule
-            </Button>
-          )}
-        </form>
-      </div>
+          <div className="space-y-6">
+            {/* Game Name */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-2"
+            >
+              <Label className="text-gray-700">Game Name</Label>
+              <Input
+                type="text"
+                value={input.gameName}
+                name="gameName"
+                onChange={changeHandler}
+                placeholder="Cricket, Football..."
+                required
+                className="w-full border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-300"
+              />
+            </motion.div>
+
+            {/* Teams Input */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              className="space-y-2"
+            >
+              <Label className="text-gray-700">Teams</Label>
+              <div className="space-y-3">
+                {input.teams.map((team, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="relative"
+                  >
+                    <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Input
+                      type="text"
+                      value={team}
+                      onChange={(e) => handleTeamChange(index, e.target.value)}
+                      placeholder={`Team ${index + 1}`}
+                      className="pl-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-300"
+                      required
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Match Date */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.2 }}
+              className="space-y-2"
+            >
+              <Label className="text-gray-700">Match Date</Label>
+              <div className="relative">
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Input
+                  type="date"
+                  value={input.matchDate}
+                  name="matchDate"
+                  onChange={changeHandler}
+                  className="pl-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-300"
+                  required
+                />
+              </div>
+            </motion.div>
+
+            {/* Match Time */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.3 }}
+              className="space-y-2"
+            >
+              <Label className="text-gray-700">Match Time</Label>
+              <div className="relative">
+                <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Input
+                  type="time"
+                  value={input.matchTime}
+                  name="matchTime"
+                  onChange={changeHandler}
+                  className="pl-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500 transition-all duration-300"
+                  required
+                />
+              </div>
+            </motion.div>
+
+            {/* Venue */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: 0.4 }}
+              className="space-y-2"
+            >
+              <Label className="text-gray-700">Venue</Label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <select
+                  name="venue"
+                  value={input.venue}
+                  onChange={changeHandler}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md focus:border-blue-500 focus:ring-blue-500 transition-all duration-300 appearance-none bg-white"
+                  required
+                >
+                  <option value="">Select Venue</option>
+                  {venues.map((venue, index) => (
+                    <option key={index} value={venue}>
+                      {venue}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </motion.div>
+
+            {/* Submit Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: 0.5 }}
+            >
+              {loading ? (
+                <Button className="w-full py-6 bg-blue-500 hover:bg-blue-600 text-white transition-all duration-300" disabled>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Please wait...
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  className="w-full py-6 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white transition-all duration-300 transform hover:scale-[1.02]"
+                >
+                  Add Schedule
+                </Button>
+              )}
+            </motion.div>
+          </div>
+        </motion.form>
+      </motion.div>
     </div>
   );
 }
