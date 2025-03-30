@@ -26,6 +26,10 @@ import FacultyHome from "./faculty/FacultyHome";
 import StudentCoordinatorHome from "./studentCoordinator/StudentCoordinatorHome";
 import GameSchedule from "./components/admin/GameSchedule";
 import AddSchedule from "./components/admin/AddSchedual";
+import Prectice from "./studentCoordinator/Prectice";
+import CreatePracticeSchedule from "./studentCoordinator/CreatePracticeSchedule";
+import ApprovePracticeTime from "./faculty/ApprovePracticeTime";
+import PrecticeStudent from "./components/ui/PrecticeStudent";
 
 const Layout = () => {
   return (
@@ -46,6 +50,7 @@ const appRouter = createBrowserRouter([
       { path: "/details/:id", element: <GameDetails /> },
       { path: "/browse", element: <Browse /> },
       { path: "/profile", element: <Profile /> },
+      { path: "/practice", element: <PrecticeStudent /> },
 
 
       { path: "/admin/members", element: <Members /> },
@@ -63,6 +68,7 @@ const appRouter = createBrowserRouter([
       // Student Coordinator URLs
       { path: "/studentCoordinator", element: <StudentCoordinator /> },
       { path: "/viweAppliedStudent/:id", element: <ViweAppliedStudent /> },
+      { path: "/createPracticeSchedule/:gameId", element: <CreatePracticeSchedule /> },
     ],
   },
   // Admin URLs
@@ -81,11 +87,13 @@ const appRouter = createBrowserRouter([
   { path: "/faculty", element: <Faculty /> },
   { path: "/faculty/viewselectedStudent/:id", element: <ViweSelectedStudent /> },
   { path: "/faculty/allplayer", element: <AllSelectedStudent /> },
+  { path: "/faculty/practice", element: <ApprovePracticeTime/>},
 
   // Student Coordinator URLs
   { path: "/studentcoordinatorhome", element: <StudentCoordinatorHome /> },
   { path: "/studentCoordinator", element: <StudentCoordinator /> },
   { path: "/viweAppliedStudent/:id", element: <ViweAppliedStudent /> },
+  { path: "/studentCoordinator/practice", element: <Prectice />},
 ]);
 
 function App() {

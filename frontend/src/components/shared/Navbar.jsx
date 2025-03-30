@@ -5,9 +5,9 @@ import { Button } from "../ui/button";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { 
   LogOut, 
-  User2, 
+  User2,
   Menu, 
-  X, 
+  X,
   ChevronDown,
   Home,
   Trophy,
@@ -70,18 +70,21 @@ function Navbar() {
       { to: "/faculty", label: "Gmaes", icon: Users },
       { to: "/faculty/allplayer", label: "Selected Players", icon: Trophy },
       { to: "/admin/schedual", label: "Schedual", icon: Trophy },
+      { to: "/faculty/practice", label: "Practice", icon: Trophy },
     ];
   } else if (user && user.role === "StudentCoordinator") {
     navLinks = [
       { to: "/studentCoordinatorhome", label: "Home", icon: Home },
       { to: "/studentCoordinator", label: "Games", icon: GamepadIcon },
       { to: "/admin/schedual", label: "Schedual", icon: Trophy },
+      { to: "/studentCoordinator/practice", label: "Practice", icon: Trophy },
     ];
   } else {
     navLinks = [
       { to: "/", label: "Home", icon: Home },
       { to: "/games", label: "Games", icon: Trophy },
       { to: "/browse", label: "Browse", icon: Search },
+      { to: "/practice", label: "Practice", icon: Trophy },
       // { to: "/admin/schedual", label: "Schedual", icon: Trophy },
     ];
   }
@@ -141,7 +144,7 @@ function Navbar() {
         </div>
       </PopoverContent>
     </Popover>
-  );
+  )
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
