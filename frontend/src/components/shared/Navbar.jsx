@@ -82,7 +82,7 @@ function Navbar() {
       { to: "/", label: "Home", icon: Home },
       { to: "/games", label: "Games", icon: Trophy },
       { to: "/browse", label: "Browse", icon: Search },
-      { to: "/admin/schedual", label: "Schedual", icon: Trophy },
+      // { to: "/admin/schedual", label: "Schedual", icon: Trophy },
     ];
   }
 
