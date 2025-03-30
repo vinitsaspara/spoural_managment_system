@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
-import { Calendar, Clock, MapPin } from 'lucide-react'
-import { useSelector } from 'react-redux'
-import { motion } from 'framer-motion'
+import React, { useEffect, useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Calendar, Clock, MapPin } from "lucide-react";
+import { useSelector } from "react-redux";
+import { motion } from "framer-motion";
 
 function FeaturedEvents() {
   const { allSchedules } = useSelector((store) => store.admin);
@@ -12,7 +18,7 @@ function FeaturedEvents() {
     // Filter and sort upcoming events
     const now = new Date();
     const filteredEvents = allSchedules
-      .filter(schedule => {
+      .filter((schedule) => {
         const eventDate = new Date(schedule.matchDate);
         return eventDate >= now;
       })
@@ -20,17 +26,17 @@ function FeaturedEvents() {
       .slice(0, 3); // Get only 3 upcoming events
 
     // Transform the data to match the required format
-    const formattedEvents = filteredEvents.map(schedule => ({
+    const formattedEvents = filteredEvents.map((schedule) => ({
       title: schedule.gameName,
       description: `Watch ${schedule.teams[0]} vs ${schedule.teams[1]} in an exciting match`,
-      date: new Date(schedule.matchDate).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      date: new Date(schedule.matchDate).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       }),
       time: schedule.matchTime,
       location: schedule.venue,
-      image: getEventImage(schedule.gameName) // Helper function to get appropriate image
+      image: getEventImage(schedule.gameName), // Helper function to get appropriate image
     }));
 
     setUpcomingEvents(formattedEvents);
@@ -39,15 +45,21 @@ function FeaturedEvents() {
   // Helper function to get appropriate image based on game name
   const getEventImage = (gameName) => {
     const gameImages = {
-      'Football': 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80',
-      'Swimming': 'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      'Athletics': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      'Cricket': 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      'Basketball': 'https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      'default': 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80'
+      Football:
+        "https://images.unsplash.com/photo-1517466787929-bc90951d0974?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
+      Swimming:
+        "https://images.unsplash.com/photo-1571902943202-507ec2618e8f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      Athletics:
+        "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      Cricket:
+        "https://images.unsplash.com/photo-1531415074968-036ba1b575da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      Basketball:
+        "https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+      default:
+        "https://images.unsplash.com/photo-1517466787929-bc90951d0974?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80",
     };
 
-    const gameType = Object.keys(gameImages).find(key => 
+    const gameType = Object.keys(gameImages).find((key) =>
       gameName.toLowerCase().includes(key.toLowerCase())
     );
     return gameImages[gameType] || gameImages.default;
@@ -72,7 +84,7 @@ function FeaturedEvents() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3  gap-8">
           {upcomingEvents.map((event, index) => (
             <motion.div
               key={index}
@@ -80,16 +92,14 @@ function FeaturedEvents() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <Card 
-                className="group relative overflow-hidden bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-              >
+              <Card className="group relative overflow-hidden bg-white/80 h-96 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
                 {/* Enhanced overlay with gradient */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                
+
                 {/* Image container with enhanced hover effect */}
                 <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={event.image} 
+                  <img
+                    src={event.image}
                     alt={event.title}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                   />
@@ -133,7 +143,7 @@ function FeaturedEvents() {
         </div>
       </div>
     </section>
-  )
+  );
 }
 
-export default FeaturedEvents
+export default FeaturedEvents;
