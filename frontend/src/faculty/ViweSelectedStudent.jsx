@@ -16,7 +16,9 @@ import { setLoading } from "@/redux/authSlice";
 import { toast } from "sonner";
 import { useParams } from "react-router-dom";
 import * as XLSX from "xlsx";
-import useGetAllGame from "@/hooks/useGetAllGame";
+import { motion, AnimatePresence } from "framer-motion";
+import { Download, Users, FileSpreadsheet, GraduationCap, Phone, IdCard } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 const ViweSelectedStudent = () => {
   const params = useParams();
@@ -90,68 +92,155 @@ const ViweSelectedStudent = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
       <Navbar />
-      <div className="max-w-6xl  mx-auto p-4">
-        <div className="flex flex-row justify-between">
-          <h1 className="text-2xl font-bold mb-4">Selected Students</h1>
-          <div className="flex gap-4 mb-4">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-7xl mx-auto p-8 mt-20"
+      >
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+          <div className="flex items-center gap-4">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 200 }}
+              className="p-4 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg"
+            >
+              <Users className="h-8 w-8 text-white" />
+            </motion.div>
+            <div>
+              <h1 className="text-4xl font-bold text-gray-800 mb-2">
+                Selected Students
+              </h1>
+              <p className="text-gray-600">
+                {gameDetails.name} • {gameDetails.department}
+              </p>
+            </div>
+          </div>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <Button
               onClick={exportToExcel}
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-3 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 flex items-center gap-3 shadow-lg hover:shadow-xl"
             >
-              Export Selected Students
+              <FileSpreadsheet className="h-5 w-5" />
+              <span className="font-medium">Export to Excel</span>
             </Button>
-          </div>
+          </motion.div>
         </div>
+
         {loading ? (
-          <p>Loading...</p>
+          <div className="flex justify-center items-center h-96">
+            <div className="relative">
+              <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600"></div>
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-600 font-medium">
+                Loading...
+              </div>
+            </div>
+          </div>
         ) : (
-          <Card className="shadow-lg">
-            <CardContent>
-              <Table className="w-full border-collapse">
-                <TableHeader>
-                  <TableRow className="bg-gray-100">
-                    <TableHead className="px-6 py-3 text-left text-sm font-semibold text-gray-700">
-                      Name
-                    </TableHead>
-                    <TableHead className="px-6 py-3 text-sm font-semibold text-gray-700">
-                      ID Number
-                    </TableHead>
-                    <TableHead className="px-6 py-3 text-sm font-semibold text-gray-700">
-                      Mobile Number
-                    </TableHead>
-                    <TableHead className="px-6 py-3 text-sm font-semibold text-gray-700">
-                      Status
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {players.map((player) => (
-                    <TableRow key={player._id} className="border-t">
-                      <TableCell className="px-6 py-4">
-                        {player?.student?.fullname}
-                      </TableCell>
-                      <TableCell className="px-6 py-4">
-                        {player.student.userId}
-                      </TableCell>
-                      <TableCell className="px-6 py-4">
-                        {player.student.phoneNumber}
-                      </TableCell>
-                      <TableCell className="px-6 py-4 capitalize">
-                        {player.status}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              {players.length === 0 && (
-                <p className="text-center mt-4">No selected students found.</p>
-              )}
-            </CardContent>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Card className="shadow-2xl border-0 bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden">
+              <CardContent className="p-8">
+                <div className="overflow-x-auto">
+                  <Table className="w-full">
+                    <TableHeader>
+                      <TableRow className="bg-gray-50/50">
+                        <TableHead className="px-8 py-6 text-left text-sm font-semibold text-gray-700">
+                          <div className="flex items-center gap-2">
+                            <GraduationCap className="h-4 w-4 text-blue-500" />
+                            Name
+                          </div>
+                        </TableHead>
+                        <TableHead className="px-8 py-6 text-sm font-semibold text-gray-700">
+                          <div className="flex items-center gap-2">
+                            <IdCard className="h-4 w-4 text-blue-500" />
+                            ID Number
+                          </div>
+                        </TableHead>
+                        <TableHead className="px-8 py-6 text-sm font-semibold text-gray-700">
+                          <div className="flex items-center gap-2">
+                            <Phone className="h-4 w-4 text-blue-500" />
+                            Mobile Number
+                          </div>
+                        </TableHead>
+                        <TableHead className="px-8 py-6 text-sm font-semibold text-gray-700">
+                          Status
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <AnimatePresence>
+                        {players.map((player, index) => (
+                          <motion.tr
+                            key={player._id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="border-t border-gray-100 hover:bg-blue-50/50 transition-colors duration-200"
+                          >
+                            <TableCell className="px-8 py-6">
+                              <div className="font-medium text-gray-800">
+                                {player?.student?.fullname}
+                              </div>
+                            </TableCell>
+                            <TableCell className="px-8 py-6">
+                              <div className="text-gray-600">
+                                {player.student.userId}
+                              </div>
+                            </TableCell>
+                            <TableCell className="px-8 py-6">
+                              <div className="text-gray-600">
+                                {player.student.phoneNumber}
+                              </div>
+                            </TableCell>
+                            <TableCell className="px-8 py-6">
+                              <Badge 
+                                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                                  player.status === 'selected' 
+                                    ? 'bg-green-100 text-green-800 hover:bg-green-200' 
+                                    : player.status === 'rejected'
+                                    ? 'bg-red-100 text-red-800 hover:bg-red-200'
+                                    : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                                }`}
+                              >
+                                {player.status}
+                              </Badge>
+                            </TableCell>
+                          </motion.tr>
+                        ))}
+                      </AnimatePresence>
+                    </TableBody>
+                  </Table>
+                </div>
+                {players.length === 0 && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-16"
+                  >
+                    <div className="bg-blue-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Users className="h-10 w-10 text-blue-500" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-800 mb-2">No Selected Students</h3>
+                    <p className="text-gray-600">There are no students selected for this game yet.</p>
+                  </motion.div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };

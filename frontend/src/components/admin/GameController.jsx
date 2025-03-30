@@ -5,8 +5,10 @@ import { Button } from "../ui/button";
 import AdminGameCard from "./AdminGameCard";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import useGetAllGame from "@/hooks/useGetAllGame";
 
 function GameController() {
+  useGetAllGame();
   const { allGames } = useSelector((state) => state.game);
   const navigate = useNavigate();
 

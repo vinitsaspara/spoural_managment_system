@@ -14,7 +14,7 @@ function StudentCoordinator() {
   return (
     <div>
       <Navbar />
-      <div className="max-w-6xl mx-auto mt-5">
+      <div className="max-w-6xl mx-auto mt-20">
         <div className="flex gap-5">
           {allGames?.length > 0 ? (
             <div className="flex-1 h-[88vh]">

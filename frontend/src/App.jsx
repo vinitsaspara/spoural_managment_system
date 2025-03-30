@@ -21,6 +21,9 @@ import StudentCoordinator from "./studentCoordinator/StudentCoordinator";
 import ViweAppliedStudent from "./studentCoordinator/ViweAppliedStudent";
 import ViweSelectedStudent from "./faculty/ViweSelectedStudent";
 import AllSelectedStudent from "./faculty/AllSelectedStudent";
+import AdminHome from "./components/admin/AdminHome";
+import FacultyHome from "./faculty/FacultyHome";
+import StudentCoordinatorHome from "./studentCoordinator/StudentCoordinatorHome";
 
 const Layout = () => {
   return (
@@ -42,7 +45,7 @@ const appRouter = createBrowserRouter([
       { path: "/browse", element: <Browse /> },
       { path: "/profile", element: <Profile /> },
 
-      // Admin URLs
+
       { path: "/admin/members", element: <Members /> },
       { path: "/admin/members/add", element: <MemberAdd /> },
       { path: "/admin/member/details", element: <MemberDetails /> },
@@ -60,6 +63,25 @@ const appRouter = createBrowserRouter([
       { path: "/viweAppliedStudent/:id", element: <ViweAppliedStudent /> },
     ],
   },
+  // Admin URLs
+  { path: "/admin", element: <AdminHome /> },
+  { path: "/admin/members", element: <Members /> },
+  { path: "/admin/members/add", element: <MemberAdd /> },
+  { path: "/admin/member/details", element: <MemberDetails /> },
+  { path: "/admin/game", element: <GameController /> },
+  { path: "/admin/game/details/:id", element: <AdminGameDetails /> },
+  { path: "/admin/game/create", element: <AdminCreateGame /> },
+
+  // Faculty URLs
+  { path: "/facultyhome", element: <FacultyHome /> },
+  { path: "/faculty", element: <Faculty /> },
+  { path: "/faculty/viewselectedStudent/:id", element: <ViweSelectedStudent /> },
+  { path: "/faculty/allplayer", element: <AllSelectedStudent /> },
+
+  // Student Coordinator URLs
+  { path: "/studentcoordinatorhome", element: <StudentCoordinatorHome /> },
+  { path: "/studentCoordinator", element: <StudentCoordinator /> },
+  { path: "/viweAppliedStudent/:id", element: <ViweAppliedStudent /> },
 ]);
 
 function App() {

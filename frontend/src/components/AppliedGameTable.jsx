@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { REGISTER_IN_GAME_API_END_POINT, USER_API_END_POINT } from "@/utils/constant";
-import { format } from "date-fns";
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Badge } from './ui/badge';
-import { Calendar, Trophy, Target, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { Calendar, Target, CheckCircle, Clock, XCircle } from 'lucide-react';
 
 function AppliedGameTable() {
   const [appliedGames, setAppliedGames] = useState([]);
@@ -41,21 +41,21 @@ function AppliedGameTable() {
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'selected':
+      case "selected":
         return (
           <Badge className="bg-green-100 text-green-800 flex items-center gap-1">
             <CheckCircle className="w-3 h-3" />
             Selected
           </Badge>
         );
-      case 'pending':
+      case "pending":
         return (
           <Badge className="bg-yellow-100 text-yellow-800 flex items-center gap-1">
             <Clock className="w-3 h-3" />
             Pending
           </Badge>
         );
-      case 'rejected':
+      case "rejected":
         return (
           <Badge className="bg-red-100 text-red-800 flex items-center gap-1">
             <XCircle className="w-3 h-3" />

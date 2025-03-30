@@ -12,5 +12,5 @@ createRoot(document.getElementById("root")).render(
       <App />
     </PersistGate>
     <Toaster />
-  </Provider>
+  </Provider> 
 );

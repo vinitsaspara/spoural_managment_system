@@ -107,7 +107,7 @@ export const login = async (req, res) => {
                 // Create a new user object without modifying the original `user`
                 const userData = {
                     _id: user._id,
-                    userId:user.userId,
+                    userId: user.userId,
                     fullname: user.fullname,
                     email: user.email,
                     role: user.role,
@@ -161,7 +161,7 @@ export const login = async (req, res) => {
         // Create a new user object without modifying the original `user`
         const userData = {
             _id: user._id,
-            userId:user.userId,
+            userId: user.userId,
             fullname: user.fullname,
             email: user.email,
             role: user.role,
@@ -187,69 +187,69 @@ export const login = async (req, res) => {
 
 export const getAllMembers = async (req, res) => {
     try {
-      // Filter for users whose role is either "Faculty" or "StudentCoordinator"
-      const members = await User.find({
-        role: { $in: ["Faculty", "StudentCoordinator"] }
-      });
-  
-      // Always return an array, even if empty
-      return res.status(200).json({
-        message: "Members fetched successfully",
-        members, // This is an array of user documents
-        success: true,
-      });
+        // Filter for users whose role is either "Faculty" or "StudentCoordinator"
+        const members = await User.find({
+            role: { $in: ["Faculty", "StudentCoordinator"] }
+        });
+
+        // Always return an array, even if empty
+        return res.status(200).json({
+            message: "Members fetched successfully",
+            members, // This is an array of user documents
+            success: true,
+        });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({
-        message: "Internal server error",
-        success: false,
-      });
+        console.error(error);
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false,
+        });
     }
-  };
+};
 
 export const removeMember = async (req, res) => {
-  try {
-    // Ensure the request is coming from an admin
-    const adminUser = await User.findById(req.id);
-    if (!adminUser || adminUser.role !== "Admin") {
-      return res.status(403).json({
-        message: "Access denied. Only admins can remove members.",
-        success: false,
-      });
+    try {
+        // Ensure the request is coming from an admin
+        const adminUser = await User.findById(req.id);
+        if (!adminUser || adminUser.role !== "Admin") {
+            return res.status(403).json({
+                message: "Access denied. Only admins can remove members.",
+                success: false,
+            });
+        }
+
+        // Get the ID of the member to remove from URL parameters
+        const memberId = req.params.id;
+
+        // Find the member by their MongoDB _id
+        const member = await User.findById(memberId);
+        if (!member) {
+            return res.status(404).json({
+                message: "Member not found.",
+                success: false,
+            });
+        }
+
+        // Optionally, prevent admin from being removed by mistake
+        if (member.role === "Admin") {
+            return res.status(400).json({
+                message: "Cannot remove an admin member.",
+                success: false,
+            });
+        }
+
+        // Remove the member
+        await member.deleteOne();
+
+        return res.status(200).json({
+            message: "Member removed successfully.",
+            success: true,
+        });
+    } catch (error) {
+        console.error("Error in removeMember:", error);
+        return res.status(500).json({
+            message: "Internal server error",
+            success: false,
+        });
     }
-
-    // Get the ID of the member to remove from URL parameters
-    const memberId = req.params.id;
-
-    // Find the member by their MongoDB _id
-    const member = await User.findById(memberId);
-    if (!member) {
-      return res.status(404).json({
-        message: "Member not found.",
-        success: false,
-      });
-    }
-
-    // Optionally, prevent admin from being removed by mistake
-    if (member.role === "Admin") {
-      return res.status(400).json({
-        message: "Cannot remove an admin member.",
-        success: false,
-      });
-    }
-
-    // Remove the member
-    await member.deleteOne();
-
-    return res.status(200).json({
-      message: "Member removed successfully.",
-      success: true,
-    });
-  } catch (error) {
-    console.error("Error in removeMember:", error);
-    return res.status(500).json({
-      message: "Internal server error",
-      success: false,
-    });
-  }
 };
