@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 import { setSingleSchedule } from "@/redux/adminSlice";
 import { motion, AnimatePresence } from "framer-motion";
+import useGetAllSchedual from "@/hooks/useGetAllSchedual";
 
 function ScheduleTable() {
   const { allSchedules, searchSchedule } = useSelector((store) => store.admin);
@@ -14,6 +15,14 @@ function ScheduleTable() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [filteredSchedules, setFilteredSchedules] = useState(allSchedules);
+
+  // Call the hook at the top level
+  useGetAllSchedual();
+
+  // Add a debug effect to monitor schedules
+  useEffect(() => {
+    console.log("Current schedules:", allSchedules);
+  }, [allSchedules]);
 
   useEffect(() => {
     const filtered = allSchedules.length >= 0 && allSchedules.filter((schedule) => {

@@ -10,8 +10,15 @@ function useGetAllSchedual() {
     useEffect(() => {
         const fetchSchedules = async () => {
             try {
-                const res = await axios.get(`${SCHEDUAL_API_END_POINT}/allschedual`, { withCredentials: true });
-                if (res.data.success) {  // Ensure backend sends success field
+                console.log("Fetching schedules..."); // Debug log
+                const res = await axios.get(`${SCHEDUAL_API_END_POINT}/allschedual`, { 
+                    withCredentials: true,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log("Schedule response:", res.data); // Debug log
+                if (res.data.success) {
                     dispatch(setAllSchedules(res.data.schedules));
                 }
             } catch (error) {
@@ -20,7 +27,7 @@ function useGetAllSchedual() {
         };
 
         fetchSchedules();
-    }, [dispatch]);  // Added `dispatch` as a dependency
+    }, []); // Remove dispatch from dependencies to prevent multiple calls
 }
 
 export default useGetAllSchedual;

@@ -8,6 +8,7 @@ import gameRout from "./routes/gameRout.js"
 import registorRout from "./routes/registorRout.js"
 import adminRoute from "./routes/adminRout.js"
 import SchedualRoute from "./routes/gameScheduleRoutes.js"
+import practiceRoute from "./routes/precticeRout.js"
 
 dotenv.config({});
 
@@ -35,6 +36,7 @@ app.use("/api/v2/game", gameRout);
 app.use("/api/v2/registration", registorRout);
 app.use("/api/v2/admin", adminRoute);
 app.use("/api/v2/schedual", SchedualRoute);
+app.use("/api/v2/practice", practiceRoute);
 
 
 app.listen(PORT, () => {

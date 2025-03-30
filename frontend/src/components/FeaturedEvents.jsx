@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import {
   Card,
@@ -9,13 +10,22 @@ import {
 import { Calendar, Clock, MapPin } from "lucide-react";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
+=======
+import React, { useEffect, useState } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
+import { Calendar, Clock, MapPin } from 'lucide-react'
+import { useSelector } from 'react-redux'
+import { motion } from 'framer-motion'
+import useGetAllSchedual from '@/hooks/useGetAllSchedual'
+>>>>>>> test
 
 function FeaturedEvents() {
+  
   const { allSchedules } = useSelector((store) => store.admin);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
-
+  useGetAllSchedual();
+  
   useEffect(() => {
-    // Filter and sort upcoming events
     const now = new Date();
     const filteredEvents = allSchedules
       .filter((schedule) => {
