@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import "./App.css";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import the protected route
 import Navbar from "./components/shared/Navbar";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
@@ -51,49 +51,162 @@ const appRouter = createBrowserRouter([
       { path: "/browse", element: <Browse /> },
       { path: "/profile", element: <Profile /> },
       { path: "/practice", element: <PrecticeStudent /> },
+      {
+        path: "/schedule",
+        element: <GameSchedule />
+      },
 
+      // Admin Protected Routes
+      {
+        path: "/admin",
+        element: (
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <AdminHome />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/members",
+        element: (
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <Members />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/members/add",
+        element: (
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <MemberAdd />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/member/details",
+        element: (
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <MemberDetails />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/game",
+        element: (
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <GameController />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/game/details/:id",
+        element: (
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <AdminGameDetails />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/game/create",
+        element: (
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <AdminCreateGame />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/addschedule",
+        element: (
+          <ProtectedRoute allowedRoles={["Admin"]}>
+            <AddSchedule />
+          </ProtectedRoute>
+        ),
+      },
 
-      { path: "/admin/members", element: <Members /> },
-      { path: "/admin/members/add", element: <MemberAdd /> },
-      { path: "/admin/member/details", element: <MemberDetails /> },
-      { path: "/admin/game", element: <GameController /> },
-      { path: "/admin/game/details/:id", element: <AdminGameDetails /> },
-      { path: "/admin/game/create", element: <AdminCreateGame /> },
+      // Faculty Protected Routes
+      {
+        path: "/facultyhome",
+        element: (
+          <ProtectedRoute allowedRoles={["Faculty"]}>
+            <FacultyHome />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/faculty",
+        element: (
+          <ProtectedRoute allowedRoles={["Faculty"]}>
+            <Faculty />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/faculty/viewselectedStudent/:id",
+        element: (
+          <ProtectedRoute allowedRoles={["Faculty"]}>
+            <ViweSelectedStudent />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/faculty/allplayer",
+        element: (
+          <ProtectedRoute allowedRoles={["Faculty"]}>
+            <AllSelectedStudent />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/faculty/practice",
+        element: (
+          <ProtectedRoute allowedRoles={["Faculty"]}>
+            <ApprovePracticeTime />
+          </ProtectedRoute>
+        ),
+      },
 
-      // Faculty URLs
-      { path: "/faculty", element: <Faculty /> },
-      { path: "/faculty/viewselectedStudent/:id", element: <ViweSelectedStudent /> },
-      { path: "/faculty/allplayer", element: <AllSelectedStudent /> },
-
-      // Student Coordinator URLs
-      { path: "/studentCoordinator", element: <StudentCoordinator /> },
-      { path: "/viweAppliedStudent/:id", element: <ViweAppliedStudent /> },
-      { path: "/createPracticeSchedule/:gameId", element: <CreatePracticeSchedule /> },
+      // Student Coordinator Protected Routes
+      {
+        path: "/studentcoordinatorhome",
+        element: (
+          <ProtectedRoute allowedRoles={["StudentCoordinator"]}>
+            <StudentCoordinatorHome />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/studentCoordinator",
+        element: (
+          <ProtectedRoute allowedRoles={["StudentCoordinator"]}>
+            <StudentCoordinator />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/viweAppliedStudent/:id",
+        element: (
+          <ProtectedRoute allowedRoles={["StudentCoordinator"]}>
+            <ViweAppliedStudent />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/createPracticeSchedule/:gameId",
+        element: (
+          <ProtectedRoute allowedRoles={["StudentCoordinator"]}>
+            <CreatePracticeSchedule />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/studentCoordinator/practice",
+        element: (
+          <ProtectedRoute allowedRoles={["StudentCoordinator"]}>
+            <Prectice />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
-  // Admin URLs
-  { path: "/admin", element: <AdminHome /> },
-  { path: "/admin/members", element: <Members /> },
-  { path: "/admin/members/add", element: <MemberAdd /> },
-  { path: "/admin/member/details", element: <MemberDetails /> },
-  { path: "/admin/game", element: <GameController /> },
-  { path: "/admin/game/details/:id", element: <AdminGameDetails /> },
-  { path: "/admin/game/create", element: <AdminCreateGame /> },
-  { path: "/admin/schedual", element: <GameSchedule/>},
-  { path: "/admin/addschedual", element: <AddSchedule/>},
-
-  // Faculty URLs
-  { path: "/facultyhome", element: <FacultyHome /> },
-  { path: "/faculty", element: <Faculty /> },
-  { path: "/faculty/viewselectedStudent/:id", element: <ViweSelectedStudent /> },
-  { path: "/faculty/allplayer", element: <AllSelectedStudent /> },
-  { path: "/faculty/practice", element: <ApprovePracticeTime/>},
-
-  // Student Coordinator URLs
-  { path: "/studentcoordinatorhome", element: <StudentCoordinatorHome /> },
-  { path: "/studentCoordinator", element: <StudentCoordinator /> },
-  { path: "/viweAppliedStudent/:id", element: <ViweAppliedStudent /> },
-  { path: "/studentCoordinator/practice", element: <Prectice />},
 ]);
 
 function App() {

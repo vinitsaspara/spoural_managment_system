@@ -62,6 +62,8 @@ function Profile() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
+      <br />
+      <br />
 
       {/* Hero Section with Cover Photo */}
       <div className="relative h-[250px]">

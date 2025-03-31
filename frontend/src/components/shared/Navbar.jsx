@@ -3,17 +3,17 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { 
-  LogOut, 
+import {
+  LogOut,
   User2,
-  Menu, 
+  Menu,
   X,
   ChevronDown,
   Home,
   Trophy,
   Search,
   Users,
-  GamepadIcon
+  GamepadIcon,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -35,8 +35,8 @@ function Navbar() {
       setScrolled(isScrolled);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const logoutHandler = async () => {
@@ -62,30 +62,36 @@ function Navbar() {
       { to: "/admin", label: "Home", icon: Home },
       { to: "/admin/members", label: "Members", icon: Users },
       { to: "/admin/game", label: "Games", icon: GamepadIcon },
-      { to: "/admin/schedual", label: "Schedual", icon: Trophy },
+      { to: "/schedule", label: "schedule", icon: Trophy },
     ];
   } else if (user && user.role === "Faculty") {
     navLinks = [
       { to: "/facultyhome", label: "Home", icon: Home },
       { to: "/faculty", label: "Gmaes", icon: Users },
       { to: "/faculty/allplayer", label: "Selected Players", icon: Trophy },
-      { to: "/admin/schedual", label: "Schedual", icon: Trophy },
+      { to: "/schedule", label: "schedule", icon: Trophy },
       { to: "/faculty/practice", label: "Practice", icon: Trophy },
     ];
   } else if (user && user.role === "StudentCoordinator") {
     navLinks = [
       { to: "/studentCoordinatorhome", label: "Home", icon: Home },
       { to: "/studentCoordinator", label: "Games", icon: GamepadIcon },
-      { to: "/admin/schedual", label: "Schedual", icon: Trophy },
+      { to: "/schedule", label: "schedule", icon: Trophy },
       { to: "/studentCoordinator/practice", label: "Practice", icon: Trophy },
     ];
-  } else {
+  } else if(user && user.role === "Student"){
     navLinks = [
       { to: "/", label: "Home", icon: Home },
       { to: "/games", label: "Games", icon: Trophy },
       { to: "/browse", label: "Browse", icon: Search },
+      { to: "/schedule", label: "schedule", icon: Trophy },
       { to: "/practice", label: "Practice", icon: Trophy },
-      // { to: "/admin/schedual", label: "Schedual", icon: Trophy },
+    ];
+  }else{
+    navLinks = [
+      { to: "/", label: "Home", icon: Home },
+      { to: "/login", label: "Games", icon: Trophy },
+      { to: "/login", label: "Browse", icon: Search },
     ];
   }
 
@@ -95,7 +101,10 @@ function Navbar() {
   const userSection = !user ? (
     <div className="flex items-center gap-3">
       <Link to="/login">
-        <Button variant="ghost" className="text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-200">
+        <Button
+          variant="ghost"
+          className="text-gray-200 hover:text-white hover:bg-white/10 transition-all duration-200"
+        >
           Login
         </Button>
       </Link>
@@ -108,22 +117,27 @@ function Navbar() {
   ) : (
     <Popover>
       <PopoverTrigger asChild>
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           className="flex items-center gap-2 hover:bg-white/10 transition-all duration-200"
         >
           <Avatar className="h-8 w-8 border-2 border-white/20">
-            <AvatarImage src={user?.profile.profilePicture} alt={user?.fullname} />
+            <AvatarImage
+              src={user?.profile.profilePicture}
+              alt={user?.fullname}
+            />
           </Avatar>
-          <span className="text-sm font-medium text-gray-900">{user?.fullname}</span>
+          <span className="text-sm font-medium text-gray-900">
+            {user?.fullname}
+          </span>
           <ChevronDown size={16} className="text-gray-400" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-64 p-2 mt-2">
         <div className="flex flex-col">
           {user && user.role !== "Admin" && (
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               className="flex items-center gap-2 justify-start hover:bg-gray-100 rounded-lg transition-all duration-200"
               asChild
             >
@@ -133,8 +147,8 @@ function Navbar() {
               </Link>
             </Button>
           )}
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             className="flex items-center gap-2 justify-start text-red-600 hover:bg-red-50 hover:text-red-700 rounded-lg transition-all duration-200"
             onClick={logoutHandler}
           >
@@ -144,22 +158,26 @@ function Navbar() {
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-white/80 backdrop-blur-md shadow-lg' 
-        : 'bg-gradient-to-r from-blue-700 to-blue-900'
-    }`}>
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "bg-white/80 backdrop-blur-md shadow-lg"
+          : "bg-gradient-to-r from-blue-700 to-blue-900"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo and Desktop Navigation */}
           <div className="flex items-center gap-8">
             <Link to="/" className="flex-shrink-0">
-              <h1 className={`text-2xl font-bold transition-colors duration-300 ${
-                scrolled ? 'text-blue-600' : 'text-white'
-              }`}>
+              <h1
+                className={`text-2xl font-bold transition-colors duration-300 ${
+                  scrolled ? "text-blue-600" : "text-white"
+                }`}
+              >
                 Spoural <span className="text-blue-300">Games</span>
               </h1>
             </Link>
@@ -170,12 +188,12 @@ function Navbar() {
                   to={link.to}
                   className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all duration-200 ${
                     isActive(link.to)
-                      ? scrolled 
-                        ? 'bg-blue-50 text-blue-600' 
-                        : 'bg-white/10 text-white'
+                      ? scrolled
+                        ? "bg-blue-50 text-blue-600"
+                        : "bg-white/10 text-white"
                       : scrolled
-                        ? 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                        : 'text-gray-300 hover:text-white hover:bg-white/5'
+                      ? "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                      : "text-gray-300 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   <link.icon size={18} />
@@ -186,9 +204,7 @@ function Navbar() {
           </div>
 
           {/* Desktop User Section */}
-          <div className="hidden md:block">
-            {userSection}
-          </div>
+          <div className="hidden md:block">{userSection}</div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
@@ -196,7 +212,9 @@ function Navbar() {
               variant="ghost"
               size="sm"
               className={`transition-colors duration-200 ${
-                scrolled ? 'text-gray-600 hover:text-blue-600' : 'text-gray-300 hover:text-white'
+                scrolled
+                  ? "text-gray-600 hover:text-blue-600"
+                  : "text-gray-300 hover:text-white"
               }`}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
@@ -212,9 +230,11 @@ function Navbar() {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className={`md:hidden transition-all duration-300 ${
-          scrolled ? 'bg-white' : 'bg-blue-800'
-        }`}>
+        <div
+          className={`md:hidden transition-all duration-300 ${
+            scrolled ? "bg-white" : "bg-blue-800"
+          }`}
+        >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navLinks.map((link) => (
               <Link
@@ -222,12 +242,12 @@ function Navbar() {
                 to={link.to}
                 className={`px-3 py-2 rounded-md text-base font-medium flex items-center gap-2 transition-all duration-200 ${
                   isActive(link.to)
-                    ? scrolled 
-                      ? 'bg-blue-50 text-blue-600' 
-                      : 'bg-white/10 text-white'
+                    ? scrolled
+                      ? "bg-blue-50 text-blue-600"
+                      : "bg-white/10 text-white"
                     : scrolled
-                      ? 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
-                      : 'text-gray-300 hover:text-white hover:bg-white/5'
+                    ? "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                    : "text-gray-300 hover:text-white hover:bg-white/5"
                 }`}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -236,7 +256,11 @@ function Navbar() {
               </Link>
             ))}
           </div>
-          <div className={`border-t ${scrolled ? 'border-gray-200' : 'border-white/10'} px-4 py-3`}>
+          <div
+            className={`border-t ${
+              scrolled ? "border-gray-200" : "border-white/10"
+            } px-4 py-3`}
+          >
             {userSection}
           </div>
         </div>
