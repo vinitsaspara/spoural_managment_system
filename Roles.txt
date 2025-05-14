@@ -1,16 +1,3 @@
 
-Missing fetures
 
--✅ In the game model logo is added but in the postman we can not send file therefore createGame function is not working in the game.controller.js that means working but in the postman it is not woking.
-
-- applyGameHandler in this function we only write axios not werite ant type (GameDetails).
-
-- AdminUpdateGame.jsx is not implemented this file is used when admin want to update the game details.
-
-
-Extra fetures
-- We can add the home page in the all the role.
-- We can add the overAll result of the spoural for all the role.
-- We can add the live youtube link.
-
-
+schedual - schedual detail is remaining in the table 

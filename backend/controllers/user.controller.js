@@ -100,7 +100,7 @@ export const login = async (req, res) => {
 
         // Convert userId to lowercase for case-insensitive matching
         const user = await User.findOne({ userId: { $regex: new RegExp(`^${userId}$`, "i") } });
-        
+
 
         if (!user) {
             return res.status(400).json({
@@ -249,59 +249,59 @@ export const updateProfile = async (req, res) => {
 
 export const updateCoverPhoto = async (req, res) => {
     try {
-      // Check if file exists
-      if (!req.file) {
-        return res.status(400).json({
-          success: false,
-          message: "Please upload an image"
-        });
-      }
+        // Check if file exists
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Please upload an image"
+            });
+        }
 
-    //   console.log(req.file);
+        //   console.log(req.file);
 
-      
-  
-      const user = await User.findById(req.id);
-      if (!user) {
-        return res.status(404).json({
-          success: false,
-          message: "User not found"
+
+
+        const user = await User.findById(req.id);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        // Delete old cover photo from cloudinary if it exists
+        if (user.profile.coverPhoto?.public_id) {
+            await cloudinary.uploader.destroy(user.profile.coverPhoto.public_id);
+        }
+
+        // Convert file to DataURI
+        const fileUri = getDataUri(req.file);
+
+        // Upload new image to cloudinary
+        const result = await cloudinary.uploader.upload(fileUri.content, {
+            folder: "cover_photos"
         });
-      }
-  
-      // Delete old cover photo from cloudinary if it exists
-      if (user.profile.coverPhoto?.public_id) {
-        await cloudinary.uploader.destroy(user.profile.coverPhoto.public_id);
-      }
-  
-      // Convert file to DataURI
-      const fileUri = getDataUri(req.file);
-  
-      // Upload new image to cloudinary
-      const result = await cloudinary.uploader.upload(fileUri.content, {
-        folder: "cover_photos"
-      });
-  
-      // Update user's cover photo
-      user.profile.coverPhoto = {
-        public_id: result.public_id,
-        url: result.secure_url
-      };
-  
-      await user.save();
-  
-      res.status(200).json({
-        success: true,
-        message: "Cover photo updated successfully",
-        coverPhoto: user.profile.coverPhoto
-      });
-  
+
+        // Update user's cover photo
+        user.profile.coverPhoto = {
+            public_id: result.public_id,
+            url: result.secure_url
+        };
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Cover photo updated successfully",
+            coverPhoto: user.profile.coverPhoto
+        });
+
     } catch (error) {
-      console.error("Error in updateCoverPhoto:", error);
-      res.status(500).json({
-        success: false,
-        message: "Error updating cover photo",
-        error: error.message
-      });
+        console.error("Error in updateCoverPhoto:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error updating cover photo",
+            error: error.message
+        });
     }
-  };
+};
