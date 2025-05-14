@@ -7,6 +7,7 @@ import userRout from "./routes/userRout.js"
 import gameRout from "./routes/gameRout.js"
 import registorRout from "./routes/registorRout.js"
 import adminRoute from "./routes/adminRout.js"
+import culturalRout from "./routes/culturalRout.js"
 dotenv.config({});
 
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/v2/user", userRout);
 app.use("/api/v2/game", gameRout);
 app.use("/api/v2/registration", registorRout);
 app.use("/api/v2/admin", adminRoute);
+app.use("/api/v2/cultural", culturalRout);
 
 
 app.listen(PORT, () => {

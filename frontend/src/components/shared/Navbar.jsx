@@ -13,7 +13,9 @@ import {
   Trophy,
   Search,
   Users,
-  GamepadIcon
+  GamepadIcon,
+  Music2,
+  Palette
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -50,20 +52,24 @@ function Navbar() {
     navLinks = [
       { to: "/admin/members", label: "Members", icon: Users },
       { to: "/admin/game", label: "Games", icon: GamepadIcon },
+      { to: "/cultural", label: "Cultural", icon: Music2 },
     ];
   } else if (user && user.role === "Faculty") {
     navLinks = [
       { to: "/faculty", label: "Faculty", icon: Users },
       { to: "/faculty/allplayer", label: "Selected Players", icon: Trophy },
+      { to: "/cultural", label: "Cultural", icon: Music2 },
     ];
   } else if (user && user.role === "StudentCoordinator") {
     navLinks = [
-      { to: "/studentCoordinator", label: "Games", icon: GamepadIcon }
+      { to: "/studentCoordinator", label: "Games", icon: GamepadIcon },
+      { to: "/cultural", label: "Cultural", icon: Music2 }
     ];
   } else {
     navLinks = [
       { to: "/", label: "Home", icon: Home },
       { to: "/games", label: "Games", icon: Trophy },
+      { to: "/cultural", label: "Cultural", icon: Music2 },
       { to: "/browse", label: "Browse", icon: Search },
     ];
   }

@@ -22,6 +22,13 @@ import ViweAppliedStudent from "./studentCoordinator/ViweAppliedStudent";
 import ViweSelectedStudent from "./faculty/ViweSelectedStudent";
 import AllSelectedStudent from "./faculty/AllSelectedStudent";
 
+// Cultural Components
+import CulturalList from "./components/cultural/CulturalList";
+import CulturalDetail from "./components/cultural/CulturalDetail";
+import CulturalForm from "./components/cultural/CulturalForm";
+import CulturalRegistrations from "./components/cultural/CulturalRegistrations";
+import CulturalSelections from "./components/cultural/CulturalSelections";
+
 const appRouter = createBrowserRouter([
   { path: "/", element: <Home /> },
   { path: "/login", element: <Login /> },
@@ -30,6 +37,14 @@ const appRouter = createBrowserRouter([
   { path: "/details/:id", element: <GameDetails /> },
   { path: "/browse", element: <Browse /> },
   { path: "/profile", element: <Profile /> },
+
+  // Cultural URLs
+  { path: "/cultural", element: <CulturalList /> },
+  { path: "/cultural/:id", element: <CulturalDetail /> },
+  { path: "/cultural/create", element: <CulturalForm /> },
+  { path: "/cultural/:id/edit", element: <CulturalForm /> },
+  { path: "/cultural/:id/registrations", element: <CulturalRegistrations /> },
+  { path: "/cultural/:id/selections", element: <CulturalSelections /> },
 
   // Admin URLs
   { path: "/admin/members", element: <Members /> },
@@ -50,7 +65,6 @@ const appRouter = createBrowserRouter([
 ]);
 
 function App() {
- 
   return <RouterProvider router={appRouter} />;
 }
 
