@@ -63,23 +63,6 @@ const appRouter = createBrowserRouter([
         element: <GameSchedule />
       },
 
-<<<<<<< HEAD
-  // Cultural URLs
-  { path: "/cultural", element: <CulturalList /> },
-  { path: "/cultural/:id", element: <CulturalDetail /> },
-  { path: "/cultural/create", element: <CulturalForm /> },
-  { path: "/cultural/:id/edit", element: <CulturalForm /> },
-  { path: "/cultural/:id/registrations", element: <CulturalRegistrations /> },
-  { path: "/cultural/:id/selections", element: <CulturalSelections /> },
-
-  // Admin URLs
-  { path: "/admin/members", element: <Members /> },
-  { path: "/admin/members/add", element: <MemberAdd /> },
-  { path: "/admin/member/details", element: <MemberDetails /> },
-  { path: "/admin/game", element: <GameController /> },
-  { path: "/admin/game/details/:id", element: <AdminGameDetails /> },
-  { path: "/admin/game/create", element: <AdminCreateGame /> },
-=======
       // Admin Protected Routes
       {
         path: "/admin",
@@ -145,7 +128,6 @@ const appRouter = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
->>>>>>> 815a6e66a843b1d33e617b0bafb710de10bb641f
 
       // Faculty Protected Routes
       {

@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
+
 
 const culturalSelectionSchema = new mongoose.Schema({
     cultural: {
@@ -37,4 +38,4 @@ const culturalSelectionSchema = new mongoose.Schema({
 // Ensure a student can only be selected once for a cultural event
 culturalSelectionSchema.index({ cultural: 1, student: 1 }, { unique: true });
 
-module.exports = mongoose.model('CulturalSelection', culturalSelectionSchema); 
+export const CulturalSelection = mongoose.model('CulturalSelection', culturalSelectionSchema); 

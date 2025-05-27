@@ -14,11 +14,7 @@ import {
   Search,
   Users,
   GamepadIcon,
-<<<<<<< HEAD
   Music2,
-  Palette
-=======
->>>>>>> 815a6e66a843b1d33e617b0bafb710de10bb641f
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -67,25 +63,13 @@ function Navbar() {
       { to: "/admin", label: "Home", icon: Home },
       { to: "/admin/members", label: "Members", icon: Users },
       { to: "/admin/game", label: "Games", icon: GamepadIcon },
-<<<<<<< HEAD
-      { to: "/cultural", label: "Cultural", icon: Music2 },
-=======
       { to: "/schedule", label: "schedule", icon: Trophy },
->>>>>>> 815a6e66a843b1d33e617b0bafb710de10bb641f
     ];
   } else if (user && user.role === "Faculty") {
     navLinks = [
       { to: "/facultyhome", label: "Home", icon: Home },
       { to: "/faculty", label: "Gmaes", icon: Users },
       { to: "/faculty/allplayer", label: "Selected Players", icon: Trophy },
-<<<<<<< HEAD
-      { to: "/cultural", label: "Cultural", icon: Music2 },
-    ];
-  } else if (user && user.role === "StudentCoordinator") {
-    navLinks = [
-      { to: "/studentCoordinator", label: "Games", icon: GamepadIcon },
-      { to: "/cultural", label: "Cultural", icon: Music2 }
-=======
       { to: "/schedule", label: "schedule", icon: Trophy },
       { to: "/faculty/practice", label: "Practice", icon: Trophy },
     ];
@@ -95,7 +79,6 @@ function Navbar() {
       { to: "/studentCoordinator", label: "Games", icon: GamepadIcon },
       { to: "/schedule", label: "schedule", icon: Trophy },
       { to: "/studentCoordinator/practice", label: "Practice", icon: Trophy },
->>>>>>> 815a6e66a843b1d33e617b0bafb710de10bb641f
     ];
   } else if(user && user.role === "Student"){
     navLinks = [

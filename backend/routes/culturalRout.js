@@ -11,8 +11,9 @@ import {
     selectParticipants,
     getSelections
 } from '../controllers/cultural.controller.js';
-import { isAuthenticated } from '../middlewares/isAuthenticated.js';
-import { isAdmin, isFaculty, isStudentCoordinator } from '../middlewares/role.middleware.js';
+import  isAuthenticated  from '../middlewares/isAuthenticated.js';
+import isAdmin from '../middlewares/isAdmin.js';
+
 
 const router = express.Router();
 
@@ -32,9 +33,9 @@ router.put('/:id', isAdmin, updateCultural);
 router.delete('/:id', isAdmin, deleteCultural);
 
 // Admin, Faculty, and Student Coordinator routes
-router.get('/:id/registrations', [isAdmin, isFaculty, isStudentCoordinator], getRegistrations);
-router.put('/:id/registrations/:registrationId', [isAdmin, isFaculty, isStudentCoordinator], updateRegistrationStatus);
-router.post('/:id/selections', [isAdmin, isFaculty], selectParticipants);
-router.get('/:id/selections', [isAdmin, isFaculty], getSelections);
+router.get('/:id/registrations', [isAdmin], getRegistrations);
+router.put('/:id/registrations/:registrationId', [isAdmin], updateRegistrationStatus);
+router.post('/:id/selections', [isAdmin], selectParticipants);
+router.get('/:id/selections', [isAdmin], getSelections);
 
 export default router; 

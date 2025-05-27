@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 const culturalSchema = new mongoose.Schema({
     name: {
@@ -54,4 +54,4 @@ const culturalSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Cultural', culturalSchema); 
+export const Cultural = mongoose.model('Cultural', culturalSchema); 

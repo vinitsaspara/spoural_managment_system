@@ -1,11 +1,11 @@
-const Cultural = require('../models/cultural.model');
-const CulturalRegistration = require('../models/culturalRegistration.model');
-const CulturalSelection = require('../models/culturalSelection.model');
-const User = require('../models/user.model');
-const { validateObjectId } = require('../utils/validation');
+import {Cultural} from '../models/cultural.model.js';
+import {CulturalRegistration} from '../models/culturalRegistration.model.js';
+import {CulturalSelection} from '../models/culturalSelection.model.js';
+import {User} from '../models/user.model.js';
+
 
 // Create a new cultural event
-exports.createCultural = async (req, res) => {
+export const createCultural = async (req, res) => {
     try {
         const {
             name,
@@ -49,7 +49,7 @@ exports.createCultural = async (req, res) => {
 };
 
 // Get all cultural events with filters
-exports.getCulturals = async (req, res) => {
+export const getCulturals = async (req, res) => {
     try {
         const { category, status, search } = req.query;
         const query = {};
@@ -75,7 +75,7 @@ exports.getCulturals = async (req, res) => {
 };
 
 // Get a specific cultural event
-exports.getCultural = async (req, res) => {
+export const getCultural = async (req, res) => {
     try {
         const cultural = await Cultural.findById(req.params.id)
             .populate('coordinator', 'name email')
@@ -92,7 +92,7 @@ exports.getCultural = async (req, res) => {
 };
 
 // Update a cultural event
-exports.updateCultural = async (req, res) => {
+export const updateCultural = async (req, res) => {
     try {
         const cultural = await Cultural.findById(req.params.id);
 
@@ -114,7 +114,7 @@ exports.updateCultural = async (req, res) => {
 };
 
 // Delete a cultural event
-exports.deleteCultural = async (req, res) => {
+export const deleteCultural = async (req, res) => {
     try {
         const cultural = await Cultural.findById(req.params.id);
 
@@ -134,7 +134,7 @@ exports.deleteCultural = async (req, res) => {
 };
 
 // Register for a cultural event
-exports.registerForCultural = async (req, res) => {
+export const registerForCultural = async (req, res) => {
     try {
         const cultural = await Cultural.findById(req.params.id);
 
@@ -172,7 +172,7 @@ exports.registerForCultural = async (req, res) => {
 };
 
 // Get registrations for a cultural event
-exports.getRegistrations = async (req, res) => {
+export const getRegistrations = async (req, res) => {
     try {
         const registrations = await CulturalRegistration.find({ cultural: req.params.id })
             .populate('student', 'name email')
@@ -185,7 +185,7 @@ exports.getRegistrations = async (req, res) => {
 };
 
 // Approve/reject registration
-exports.updateRegistrationStatus = async (req, res) => {
+export const updateRegistrationStatus = async (req, res) => {
     try {
         const { status, remarks } = req.body;
         const registration = await CulturalRegistration.findById(req.params.registrationId);
@@ -206,7 +206,7 @@ exports.updateRegistrationStatus = async (req, res) => {
 };
 
 // Select participants for cultural event
-exports.selectParticipants = async (req, res) => {
+export const selectParticipants = async (req, res) => {
     try {
         const { selections } = req.body;
         const cultural = await Cultural.findById(req.params.id);
@@ -238,7 +238,7 @@ exports.selectParticipants = async (req, res) => {
 };
 
 // Get selections for a cultural event
-exports.getSelections = async (req, res) => {
+export const getSelections = async (req, res) => {
     try {
         const selections = await CulturalSelection.find({ cultural: req.params.id })
             .populate('student', 'name email')
