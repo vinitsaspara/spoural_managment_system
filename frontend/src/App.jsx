@@ -39,6 +39,13 @@ const Layout = () => {
   );
 };
 
+// Cultural Components
+import CulturalList from "./components/cultural/CulturalList";
+import CulturalDetail from "./components/cultural/CulturalDetail";
+import CulturalForm from "./components/cultural/CulturalForm";
+import CulturalRegistrations from "./components/cultural/CulturalRegistrations";
+import CulturalSelections from "./components/cultural/CulturalSelections";
+
 const appRouter = createBrowserRouter([
   {
     element: <Layout />,

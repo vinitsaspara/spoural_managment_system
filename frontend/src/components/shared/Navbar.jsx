@@ -14,6 +14,7 @@ import {
   Search,
   Users,
   GamepadIcon,
+  Music2,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -83,6 +84,7 @@ function Navbar() {
     navLinks = [
       { to: "/", label: "Home", icon: Home },
       { to: "/games", label: "Games", icon: Trophy },
+      { to: "/cultural", label: "Cultural", icon: Music2 },
       { to: "/browse", label: "Browse", icon: Search },
       { to: "/schedule", label: "schedule", icon: Trophy },
       { to: "/practice", label: "Practice", icon: Trophy },
