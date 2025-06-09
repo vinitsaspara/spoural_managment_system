@@ -34,7 +34,7 @@ function GameSchedule() {
           {user?.role === "Admin" && (
             <Button
               className="bg-blue-200 text-blue-600 hover:bg-blue-100"
-              onClick={() => navigate("/admin/addschedual")}
+              onClick={() => navigate("/admin/addschedule")}
             >
               New Schedule
             </Button>
