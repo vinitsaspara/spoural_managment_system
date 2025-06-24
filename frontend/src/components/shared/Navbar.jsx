@@ -62,21 +62,21 @@ function Navbar() {
       { to: "/admin", label: "Home", icon: Home },
       { to: "/admin/members", label: "Members", icon: Users },
       { to: "/admin/game", label: "Games", icon: GamepadIcon },
-      { to: "/admin/schedual", label: "Schedual", icon: Trophy },
+      { to: "/admin/schedual", label: "Schedule", icon: Trophy },
     ];
   } else if (user && user.role === "Faculty") {
     navLinks = [
       { to: "/facultyhome", label: "Home", icon: Home },
       { to: "/faculty", label: "Gmaes", icon: Users },
       { to: "/faculty/allplayer", label: "Selected Players", icon: Trophy },
-      { to: "/admin/schedual", label: "Schedual", icon: Trophy },
+      { to: "/admin/schedual", label: "Schedule", icon: Trophy },
       { to: "/faculty/practice", label: "Practice", icon: Trophy },
     ];
   } else if (user && user.role === "StudentCoordinator") {
     navLinks = [
       { to: "/studentCoordinatorhome", label: "Home", icon: Home },
       { to: "/studentCoordinator", label: "Games", icon: GamepadIcon },
-      { to: "/admin/schedual", label: "Schedual", icon: Trophy },
+      { to: "/admin/schedual", label: "Schedule", icon: Trophy },
       { to: "/studentCoordinator/practice", label: "Practice", icon: Trophy },
     ];
   } else {

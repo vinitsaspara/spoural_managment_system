@@ -25,7 +25,7 @@ export default function AdminHome() {
             <div className="mt-4 flex flex-col gap-3">
               <Button onClick={() => navigate("/admin/members")} variant="outline" className="w-full">Add Member</Button>
               <Button onClick={() => navigate("/admin/game")} variant="outline" className="w-full">Add Games</Button>
-              <Button onClick={() => navigate("/admin/schedual")} variant="outline" className="w-full">Add Schadual</Button>
+              <Button onClick={() => navigate("/admin/schedual")} variant="outline" className="w-full">Add Schedule</Button>
             </div>
           </CardContent>
         </Card>

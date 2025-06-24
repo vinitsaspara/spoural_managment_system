@@ -22,7 +22,7 @@ function Games() {
             <FilterGameCard />
           </div>
           {allGames.length <= 0 ? (
-            <span>Job not found</span>
+            <span>Games not available</span>
           ) : (
             <div className="flex-1 h-[88vh] ">
               <div className="grid grid-cols-3 gap-4 ">
